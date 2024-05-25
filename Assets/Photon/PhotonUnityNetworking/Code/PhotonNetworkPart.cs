@@ -2571,5 +2571,10 @@ namespace Photon.Pun
                 }
             }
         }
+
+        public static RoomInfo[] GetCustomRoomList()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
