@@ -111,21 +111,32 @@ public class CharacterSet : MonoBehaviourPun
     {
         if (!isInvencible)
         {
+            bool defendDamage;
+
             //evento de mitigação de dano
             if (isDefending && _canDefend)
             {
-                if (_midAttack || _crouchAttack == isCrouched) currentHealth = Mathf.Max(currentHealth - _damage * defenseDecrement, 0);               
-                else currentHealth = Mathf.Max(currentHealth - _damage, 0);
+                if (_midAttack || _crouchAttack == isCrouched)
+                {
+                    currentHealth = Mathf.Max(currentHealth - _damage * defenseDecrement, 0);
+                    defendDamage = true;
+                }
+                else
+                {
+                    currentHealth = Mathf.Max(currentHealth - _damage, 0);
+                    defendDamage = false;
+                }
             }
             else
             {
                 currentHealth = Mathf.Max(currentHealth - _damage, 0);
+                defendDamage = false;
             }
             Debug.Log(currentHealth);
 
             //evento pós mitigação de dano
             if (currentHealth == 0 && photonView.IsMine) Death();
-            else DamageEffect(_knockback, _knockup);
+            else DamageEffect(_knockback, _knockup, defendDamage);
         }
     }
 
@@ -197,10 +208,18 @@ public class CharacterSet : MonoBehaviourPun
     }
 
     //método de efeito de dano
-    public void DamageEffect(float _knockback, float _knockup)
+    public void DamageEffect(float _knockback, float _knockup, bool _isDefended)
     {
         //mudança de efeitos em caso de defesa
-        if (isDefending) { }
+        if (_isDefended) 
+        {
+            
+        }
+        else
+        {
+            rb.velocity = new Vector2(_knockback, _knockup);
+            anim.SetTrigger("Damaged");
+        }
     }
     #endregion
 
