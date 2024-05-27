@@ -18,12 +18,12 @@ public class PlayerController : CharacterSet
         canInputJump = true;
 
         //seleção da layer do adiversário com base na do player (layer de aplicação do dano)
-        if (gameObject.layer == 7)
+        if (gameObject.layer == 6)
         {
             oponentLayer = LayerMask.GetMask("PlayerTwo");
             gameObject.tag = "PlayerTwo";
         }
-        else if (gameObject.layer == 8)
+        else if (gameObject.layer == 7)
         {
             oponentLayer = LayerMask.GetMask("PlayerOne");
             gameObject.tag = "Player";
@@ -58,6 +58,7 @@ public class PlayerController : CharacterSet
     //método de input para ataque médio
     public void MediumAttackAction(InputAction.CallbackContext value)
     {
+        if (!photonView.IsMine) return;
         if (value.performed)
         {
             currentAttackType = attackTypes.mediumAttack;
@@ -101,7 +102,6 @@ public class PlayerController : CharacterSet
             canMove = true;
             isDefending = false;
         }
-        anim.SetBool("IsDefending", isDefending);
     }
 
         //ação de agachar

@@ -211,14 +211,22 @@ public class CharacterSet : MonoBehaviourPun
     public void DamageEffect(float _knockback, float _knockup, bool _isDefended)
     {
         //mudança de efeitos em caso de defesa
-        if (_isDefended) 
+        if (_isDefended)
         {
-            
+
         }
         else
         {
-            rb.velocity = new Vector2(_knockback, _knockup);
-            anim.SetTrigger("Damaged");
+            if (!OnGround() && _knockup <= 0)
+            {
+                rb.velocity = new Vector2(_knockback, .5f);
+                anim.SetTrigger("Damaged");
+            }
+            else
+            {
+                rb.velocity = new Vector2(_knockback, _knockup);
+                anim.SetTrigger("Damaged");
+            }
         }
     }
     #endregion
@@ -257,8 +265,11 @@ public class CharacterSet : MonoBehaviourPun
         if (gatlingCombo == 0) return;
         else
         {
+            if (!isCrouched)
+            {
+                canMove = true;
+            }
             canAttack = true;
-            canMove = true;
             gatlingCombo = 0;
             Debug.Log(gatlingCombo);
         }
@@ -275,7 +286,6 @@ public class CharacterSet : MonoBehaviourPun
             Debug.Log(gatlingCombo);
         }
         else canAttack = false; 
-            
         anim.SetBool("CanGatling", canAttack);
     }
     #endregion
@@ -293,7 +303,7 @@ public class CharacterSet : MonoBehaviourPun
         //Chamando propriedade onground para mudar animação
         anim.SetBool("OnGround", OnGround());
 
-        //mudança de direção do sprite do player
+        //Mudança de direção do sprite do player
         if ((oponentDirection.position.x > gameObject.transform.position.x && transform.localScale.x < 0) || (oponentDirection.position.x < gameObject.transform.position.x && transform.localScale.x > 0))
         {
             Vector2 _localScale = transform.localScale;
@@ -305,6 +315,11 @@ public class CharacterSet : MonoBehaviourPun
         //controle das animações de "andar" com base na velocidade do Player
         anim.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
         anim.SetFloat("WalkSpeed", walkSpeed * inputDirection.x);
+
+
+        anim.SetBool("IsDefending", isDefending);
+        anim.SetBool("Crouched", isCrouched);
+        //anim.SetBool("CanGatling", canAttack);
     }
 
     //método para agachar
@@ -328,8 +343,6 @@ public class CharacterSet : MonoBehaviourPun
         {
             isCrouched = false;
         }
-
-        anim.SetBool("Crouched", isCrouched);
     }
 
     #region defense
