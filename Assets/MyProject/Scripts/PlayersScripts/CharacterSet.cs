@@ -91,7 +91,7 @@ public class CharacterSet : MonoBehaviourPun
     {
         instance = this;
         currentHealth = maxHealth;
-        //healthBar.SetMaxHealth((int)maxHealth);
+        //healthBar.SetMaxHealth(maxHealth);
         currentDefenseShield = maxDefenseShield;
         currentEnergy = maxEnergy;
     }
@@ -135,11 +135,11 @@ public class CharacterSet : MonoBehaviourPun
                 defendDamage = false;
             }
             Debug.Log(currentHealth);
-            healthBar.SetHealth((int)currentHealth);
+            //healthBar.SetHealth(currentHealth);
 
             //evento p�s mitiga��o de dano
             if (currentHealth == 0 && photonView.IsMine) Death();
-            else DamageEffect(_knockback, _knockup, defendDamage);
+            else if (currentHealth > 0 && photonView.IsMine) DamageEffect(_knockback, _knockup, defendDamage);
         }
     }
 
@@ -257,7 +257,7 @@ public class CharacterSet : MonoBehaviourPun
     public virtual void ProjectileAttack()
     {
         if (gameObject.layer == 7) projectile.tag = "ProjectileTwo";
-        else if (gameObject.layer == 8) projectile.tag = "ProjectileOne";
+        else if (gameObject.layer == 6) projectile.tag = "ProjectileOne";
 
         Instantiate(projectile, projectilePoint.position, projectilePoint.rotation).GetComponent<ProjectileScript>().direction = new Vector2(transform.localScale.x, 0f); 
     }
@@ -302,7 +302,6 @@ public class CharacterSet : MonoBehaviourPun
     //m�todo para anima��es
     public void Animations()
     {
-
         //Chamando propriedade onground para mudar anima��o
         anim.SetBool("OnGround", OnGround());
 

@@ -21,12 +21,12 @@ public class PlayerController : CharacterSet
         if (gameObject.layer == 6)
         {
             oponentLayer = LayerMask.GetMask("PlayerTwo");
-            gameObject.tag = "PlayerTwo";
+            gameObject.tag = "Player";
         }
         else if (gameObject.layer == 7)
         {
             oponentLayer = LayerMask.GetMask("PlayerOne");
-            gameObject.tag = "Player";
+            gameObject.tag = "PlayerTwo";
         }
     }
 
