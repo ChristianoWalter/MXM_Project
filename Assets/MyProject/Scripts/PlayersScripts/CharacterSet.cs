@@ -12,10 +12,11 @@ public class CharacterSet : MonoBehaviourPun
     //status de vida do Player
     [SerializeField] protected bool isInvencible;
     [SerializeField] float maxHealth;
-    //Está em serializefield para testes de funcionamento, após testado e aprovado remover o serializefield
+    [SerializeField] HealthBar healthBar;
+    //Estï¿½ em serializefield para testes de funcionamento, apï¿½s testado e aprovado remover o serializefield
     public float currentHealth;
 
-    //status de movimentação do Player
+    //status de movimentaï¿½ï¿½o do Player
     public bool canMove;
     public bool isCrouched;
     [SerializeField] protected float moveSpeed;
@@ -23,22 +24,22 @@ public class CharacterSet : MonoBehaviourPun
 
     [Header("Combat Stats")]
     //status de combate    
-    //Após testado e aprovado remover o serializefield
+    //Apï¿½s testado e aprovado remover o serializefield
     [SerializeField]protected float currentDamage;
     [SerializeField] protected float[] damages;
-    //Após testado e aprovado remover o serializefield
+    //Apï¿½s testado e aprovado remover o serializefield
     [SerializeField] protected float currentAttackRange;
     [SerializeField] protected float[] attackRanges;
-    //Após testado e aprovado remover o serializefield
+    //Apï¿½s testado e aprovado remover o serializefield
     [SerializeField] protected bool canAttack;
     [SerializeField] protected LayerMask oponentLayer;
-    //Após testado e aprovado remover o serializefield
+    //Apï¿½s testado e aprovado remover o serializefield
     [SerializeField] protected float currentKnockupValue;
-    //Após testado e aprovado remover o serializefield
+    //Apï¿½s testado e aprovado remover o serializefield
     [SerializeField] protected float currentKnockbackValue;
 
     [Header("Attacks")]
-    //Após testado e aprovado remover o serializefield
+    //Apï¿½s testado e aprovado remover o serializefield
     [SerializeField] protected attackTypes currentAttackType;
     [SerializeField] protected float[] knockupValues;
     [SerializeField] protected float[] knockbackValues;
@@ -48,11 +49,11 @@ public class CharacterSet : MonoBehaviourPun
     [SerializeField] protected float[] specialKnockbackValues;
     [SerializeField] protected float[] specialKnockupValues;
     [SerializeField] protected float maxEnergy;
-    //Após testado e aprovado remover o serializefield
+    //Apï¿½s testado e aprovado remover o serializefield
     [SerializeField] protected float currentEnergy;
     [SerializeField] protected float[] energyCost;
     [SerializeField] protected bool canUseSpecial;
-    //Após testado e aprovado remover o serializefield
+    //Apï¿½s testado e aprovado remover o serializefield
     [SerializeField] protected attackTypes specialAttacks;
     [SerializeField] protected GameObject projectile;
 
@@ -61,7 +62,7 @@ public class CharacterSet : MonoBehaviourPun
     [SerializeField] protected float defenseDecrement;
     [SerializeField] protected float maxDefenseShield;
     [SerializeField]protected float currentDefenseShield;
-    //Após testado e aprovado remover o serializefield
+    //Apï¿½s testado e aprovado remover o serializefield
     protected bool isOutStamina = false;
     [SerializeField] protected float timeStuned;
     protected enum attackTypes {quickAttack, mediumAttack, heavyAttack};
@@ -73,16 +74,16 @@ public class CharacterSet : MonoBehaviourPun
     public Transform oponentDirection;
     public Transform projectilePoint;
 
-    //variáveis para controle do pulo
+    //variï¿½veis para controle do pulo
     [SerializeField] protected Transform foot;
     [SerializeField] protected LayerMask ground;
 
-    //variáveis para input e mudança de direção
+    //variï¿½veis para input e mudanï¿½a de direï¿½ï¿½o
     protected Vector2 inputDirection;
     protected float walkSpeed = 1;
     protected bool canCrouch;
 
-    //variável para animator do personagem
+    //variï¿½vel para animator do personagem
     [SerializeField] protected Animator anim;
 
 
@@ -90,30 +91,31 @@ public class CharacterSet : MonoBehaviourPun
     {
         instance = this;
         currentHealth = maxHealth;
+        //healthBar.SetMaxHealth((int)maxHealth);
         currentDefenseShield = maxDefenseShield;
         currentEnergy = maxEnergy;
     }
 
     protected virtual void Update()
     {
-            //diminuição e recarga do escudo
+            //diminuiï¿½ï¿½o e recarga do escudo
         ShieldUsing();
 
-            //Animações
+            //Animaï¿½ï¿½es
         Animations();
     }
 
-    //métodos de combate (efeitos, aplicação e recepção de dano)
+    //mï¿½todos de combate (efeitos, aplicaï¿½ï¿½o e recepï¿½ï¿½o de dano)
     #region Combat Methods
 
-    //método de recepção de dano
+    //mï¿½todo de recepï¿½ï¿½o de dano
     public void TakeDamage(float _damage, float _knockback, float _knockup, bool _canDefend, bool _crouchAttack, bool _midAttack)
     {
         if (!isInvencible)
         {
             bool defendDamage;
 
-            //evento de mitigação de dano
+            //evento de mitigaï¿½ï¿½o de dano
             if (isDefending && _canDefend)
             {
                 if (_midAttack || _crouchAttack == isCrouched)
@@ -133,8 +135,9 @@ public class CharacterSet : MonoBehaviourPun
                 defendDamage = false;
             }
             Debug.Log(currentHealth);
+            healthBar.SetHealth((int)currentHealth);
 
-            //evento pós mitigação de dano
+            //evento pï¿½s mitigaï¿½ï¿½o de dano
             if (currentHealth == 0 && photonView.IsMine) Death();
             else DamageEffect(_knockback, _knockup, defendDamage);
         }
@@ -159,7 +162,7 @@ public class CharacterSet : MonoBehaviourPun
         }
     }*/
 
-    //Método para chamar ataque básico
+    //Mï¿½todo para chamar ataque bï¿½sico
     protected IEnumerator Attacking()
     {
         if (OnGround()) canMove = false;
@@ -181,7 +184,7 @@ public class CharacterSet : MonoBehaviourPun
         anim.SetBool("CanGatling", canAttack);
     }
 
-    //Método para chamar ataque especial
+    //Mï¿½todo para chamar ataque especial
     protected virtual void SpecialAttack()
     {
         if (canAttack && currentEnergy >= energyCost[(int)specialAttacks] && OnGround())
@@ -201,16 +204,16 @@ public class CharacterSet : MonoBehaviourPun
 
 
 
-    //método de morte
+    //mï¿½todo de morte
     public void Death()
     {
 
     }
 
-    //método de efeito de dano
+    //mï¿½todo de efeito de dano
     public void DamageEffect(float _knockback, float _knockup, bool _isDefended)
     {
-        //mudança de efeitos em caso de defesa
+        //mudanï¿½a de efeitos em caso de defesa
         if (_isDefended)
         {
 
@@ -232,10 +235,10 @@ public class CharacterSet : MonoBehaviourPun
     #endregion
 
 
-    //Métodos chamados nas animações para causar dano ou resetar ataques
+    //Mï¿½todos chamados nas animaï¿½ï¿½es para causar dano ou resetar ataques
     #region On Animation Methods
 
-    //Método para aplicar dano comum
+    //Mï¿½todo para aplicar dano comum
     public virtual void DealDamage()
     {
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(currentAttackPoint.position, currentAttackRange * 2, oponentLayer);
@@ -250,7 +253,7 @@ public class CharacterSet : MonoBehaviourPun
         }
     }
 
-    //Método para chamar projétil
+    //Mï¿½todo para chamar projï¿½til
     public virtual void ProjectileAttack()
     {
         if (gameObject.layer == 7) projectile.tag = "ProjectileTwo";
@@ -275,7 +278,7 @@ public class CharacterSet : MonoBehaviourPun
         }
     }
 
-    //ativação do Gatling por meio de animation event
+    //ativaï¿½ï¿½o do Gatling por meio de animation event
     public void GatlingActivate()
     {
         if (gatlingCombo < 3)
@@ -290,20 +293,20 @@ public class CharacterSet : MonoBehaviourPun
     }
     #endregion
 
-    //método para verificação do Player no chão
+    //mï¿½todo para verificaï¿½ï¿½o do Player no chï¿½o
     protected bool OnGround()
     {
         return Physics2D.OverlapCircle(foot.position, .1f, ground);
     }
 
-    //método para animações
+    //mï¿½todo para animaï¿½ï¿½es
     public void Animations()
     {
 
-        //Chamando propriedade onground para mudar animação
+        //Chamando propriedade onground para mudar animaï¿½ï¿½o
         anim.SetBool("OnGround", OnGround());
 
-        //Mudança de direção do sprite do player
+        //Mudanï¿½a de direï¿½ï¿½o do sprite do player
         if ((oponentDirection.position.x > gameObject.transform.position.x && transform.localScale.x < 0) || (oponentDirection.position.x < gameObject.transform.position.x && transform.localScale.x > 0))
         {
             Vector2 _localScale = transform.localScale;
@@ -312,7 +315,7 @@ public class CharacterSet : MonoBehaviourPun
             walkSpeed = _localScale.x;
         }
 
-        //controle das animações de "andar" com base na velocidade do Player
+        //controle das animaï¿½ï¿½es de "andar" com base na velocidade do Player
         anim.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
         anim.SetFloat("WalkSpeed", walkSpeed * inputDirection.x);
 
@@ -322,7 +325,7 @@ public class CharacterSet : MonoBehaviourPun
         //anim.SetBool("CanGatling", canAttack);
     }
 
-    //método para agachar
+    //mï¿½todo para agachar
     protected void Crouch()
     {
         if (OnGround() && !isCrouched && !isOutStamina)
@@ -346,7 +349,7 @@ public class CharacterSet : MonoBehaviourPun
     }
 
     #region defense
-    //sequência de quebra de defesa
+    //sequï¿½ncia de quebra de defesa
     protected IEnumerator OutStamina()
     {
         isOutStamina = true;
