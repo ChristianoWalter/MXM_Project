@@ -352,10 +352,11 @@ public class CharacterSet : MonoBehaviourPun
     protected IEnumerator OutStamina()
     {
         isOutStamina = true;
+        anim.SetTrigger("OutStamina");
+        yield return new WaitForSeconds(.01f);
         isDefending = false;
         canAttack = false;
         canMove = false;
-        anim.SetTrigger("OutStamina");
         yield return new WaitForSeconds(timeStuned);
         anim.SetTrigger("Recharged");
         canAttack = true; 
