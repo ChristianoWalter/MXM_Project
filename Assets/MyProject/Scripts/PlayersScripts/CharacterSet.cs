@@ -189,6 +189,7 @@ public class CharacterSet : MonoBehaviourPun
     {
         if (canAttack && currentEnergy >= energyCost[(int)specialAttacks] && OnGround())
         {
+            currentAttackPoint = attackPoints[0];
             currentEnergy -= energyCost[(int)specialAttacks];
             anim.SetInteger("AttackType", (int)specialAttacks);
             gatlingCombo = 1;
