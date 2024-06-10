@@ -115,7 +115,7 @@ public class CharacterSet : MonoBehaviourPun
     }
 
     [PunRPC]
-    private void DamageRPC(float _damage, float _knockback, float _knockup, bool _canDefend, bool _crouchAttack, bool _midAttack)
+    protected void DamageRPC(float _damage, float _knockback, float _knockup, bool _canDefend, bool _crouchAttack, bool _midAttack)
     {
         if (!isInvencible)
         {
