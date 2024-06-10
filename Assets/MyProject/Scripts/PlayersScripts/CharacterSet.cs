@@ -111,6 +111,12 @@ public class CharacterSet : MonoBehaviourPun
     //m�todo de recep��o de dano
     public void TakeDamage(float _damage, float _knockback, float _knockup, bool _canDefend, bool _crouchAttack, bool _midAttack)
     {
+        photonView.RPC(nameof(DamageRPC), RpcTarget.All, _damage, _knockback, _knockup, _canDefend, _crouchAttack, _midAttack);
+    }
+
+    [PunRPC]
+    private void DamageRPC(float _damage, float _knockback, float _knockup, bool _canDefend, bool _crouchAttack, bool _midAttack)
+    {
         if (!isInvencible)
         {
             bool defendDamage;
@@ -227,14 +233,24 @@ public class CharacterSet : MonoBehaviourPun
             if (!OnGround() && _knockup <= 0)
             {
                 rb.velocity = new Vector2(_knockback, .5f);
+                StartCoroutine(DamagedMove());
                 anim.SetTrigger("Damaged");
             }
             else
             {
                 rb.velocity = new Vector2(_knockback, _knockup);
+                StartCoroutine(DamagedMove());
                 anim.SetTrigger("Damaged");
             }
         }
+    }
+
+    private IEnumerator DamagedMove()
+    {
+        canMove = false;
+        yield return new WaitForSeconds(.5f);
+        canMove = true;
+
     }
     #endregion
 
@@ -245,6 +261,8 @@ public class CharacterSet : MonoBehaviourPun
     //M�todo para aplicar dano comum
     public virtual void DealDamage()
     {
+        if (!photonView.IsMine) return;
+
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(currentAttackPoint.position, currentAttackRange * 2, oponentLayer);
 
         foreach (Collider2D enemy in hitEnemies)

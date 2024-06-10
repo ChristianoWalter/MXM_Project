@@ -13,10 +13,6 @@ public class PlayerController : CharacterSet
     {
         //execução do método mãe
         base.Awake();
-        if (!photonView.IsMine) return;
-
-        canInputJump = true;
-
         //seleção da layer do adiversário com base na do player (layer de aplicação do dano)
         if (gameObject.layer == 6)
         {
@@ -28,6 +24,9 @@ public class PlayerController : CharacterSet
             oponentLayer = LayerMask.GetMask("PlayerOne");
             gameObject.tag = "PlayerTwo";
         }
+        
+        if (!photonView.IsMine) return;
+        canInputJump = true;
     }
 
     protected override void Update()
