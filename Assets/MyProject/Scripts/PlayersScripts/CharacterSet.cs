@@ -121,17 +121,20 @@ public class CharacterSet : MonoBehaviourPun
                 if (_midAttack || _crouchAttack == isCrouched)
                 {
                     currentHealth = Mathf.Max(currentHealth - _damage * defenseDecrement, 0);
+                    currentEnergy += .1f;
                     defendDamage = true;
                 }
                 else
                 {
                     currentHealth = Mathf.Max(currentHealth - _damage, 0);
+                    currentEnergy += .2f;
                     defendDamage = false;
                 }
             }
             else
             {
                 currentHealth = Mathf.Max(currentHealth - _damage, 0);
+                currentEnergy += .2f;
                 defendDamage = false;
             }
             Debug.Log(currentHealth);
@@ -166,7 +169,7 @@ public class CharacterSet : MonoBehaviourPun
     protected IEnumerator Attacking()
     {
         if (OnGround()) canMove = false;
-        else gatlingCombo = 1;
+        //else gatlingCombo = 1;
 
         anim.SetInteger("AttackType", (int)currentAttackType);
         currentDamage = damages[(int)currentAttackType];
@@ -249,7 +252,7 @@ public class CharacterSet : MonoBehaviourPun
             enemy.GetComponent<CharacterSet>().TakeDamage(currentDamage, currentKnockbackValue, currentKnockupValue, true, isCrouched, false);
             if(enemy.GetComponent<CharacterSet>().isDefending == false)
             {
-                currentEnergy++;
+                currentEnergy += .4f;
             }
         }
     }
@@ -282,7 +285,7 @@ public class CharacterSet : MonoBehaviourPun
     //ativa��o do Gatling por meio de animation event
     public void GatlingActivate()
     {
-        if (gatlingCombo < 3)
+        if (gatlingCombo < 2)
         {
             canAttack = true;
             //anim.SetBool("CanGatling", canAttack);
