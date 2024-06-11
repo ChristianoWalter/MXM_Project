@@ -1,11 +1,14 @@
 using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerController : CharacterSet 
-{ 
+{
+    Player photonPlayer;
+
         //variável para evitar que o jogador pule sempre que mudar de direção com o botão pressionado
     bool canInputJump;
 

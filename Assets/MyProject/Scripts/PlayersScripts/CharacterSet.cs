@@ -6,8 +6,6 @@ using Photon.Realtime;
 
 public class CharacterSet : MonoBehaviourPun
 {
-    public static CharacterSet instance;
-
     [Header("Base Stats")]
     //status de vida do Player
     [SerializeField] protected bool isInvencible;
@@ -89,7 +87,6 @@ public class CharacterSet : MonoBehaviourPun
 
     protected virtual void Awake()
     {
-        instance = this;
         currentHealth = maxHealth;
         //healthBar.SetMaxHealth(maxHealth);
         currentDefenseShield = maxDefenseShield;
