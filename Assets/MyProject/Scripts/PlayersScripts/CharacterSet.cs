@@ -144,8 +144,8 @@ public class CharacterSet : MonoBehaviourPun
             //healthBar.SetHealth(currentHealth);
 
             //evento p�s mitiga��o de dano
-            if (currentHealth == 0 && photonView.IsMine) Death();
-            else if (currentHealth > 0 && photonView.IsMine) DamageEffect(_knockback, _knockup, defendDamage);
+            if (currentHealth == 0) Death();
+            else if (currentHealth > 0) DamageEffect(_knockback, _knockup, defendDamage);
         }
     }
 
