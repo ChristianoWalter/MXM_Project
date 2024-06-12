@@ -105,12 +105,13 @@ public class CharacterSet : MonoBehaviourPun
     //m�todos de combate (efeitos, aplica��o e recep��o de dano)
     #region Combat Methods
 
-    //m�todo de recep��o de dano
+    //m�todo de recep��o de dano 
     public void TakeDamage(float _damage, float _knockback, float _knockup, bool _canDefend, bool _crouchAttack, bool _midAttack)
     {
         photonView.RPC(nameof(DamageRPC), RpcTarget.All, _damage, _knockback, _knockup, _canDefend, _crouchAttack, _midAttack);
     }
 
+    //método para validação de dano, via RPC para ambos os jogadores
     [PunRPC]
     protected void DamageRPC(float _damage, float _knockback, float _knockup, bool _canDefend, bool _crouchAttack, bool _midAttack)
     {
@@ -229,13 +230,13 @@ public class CharacterSet : MonoBehaviourPun
         {
             if (!OnGround() && _knockup <= 0)
             {
-                rb.velocity = new Vector2(_knockback, .5f);
+                rb.velocity = new Vector2(_knockback * transform.localScale.x * -1, .5f);
                 StartCoroutine(DamagedMove());
                 anim.SetTrigger("Damaged");
             }
             else
             {
-                rb.velocity = new Vector2(_knockback, _knockup);
+                rb.velocity = new Vector2(_knockback * transform.localScale.x * -1, _knockup);
                 StartCoroutine(DamagedMove());
                 anim.SetTrigger("Damaged");
             }

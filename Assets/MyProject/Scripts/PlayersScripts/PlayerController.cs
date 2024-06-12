@@ -132,6 +132,7 @@ public class PlayerController : CharacterSet
             //ação de pulo
         if (inputDirection.y > 0 && OnGround() && canInputJump && !isDefending && !isOutStamina)
         {
+            if (!canMove) return;
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             canInputJump = false;
             Debug.Log("cima");

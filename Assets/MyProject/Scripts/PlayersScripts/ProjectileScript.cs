@@ -22,6 +22,11 @@ public class ProjectileScript : MonoBehaviour
     [SerializeField] float knockbackValue;
     [SerializeField] float knockupValue;
 
+    private void Start()
+    {
+        transform.localScale = new Vector2(direction.x, 1f);
+    }
+
     // Update is called once per frame
     void Update()
     {
