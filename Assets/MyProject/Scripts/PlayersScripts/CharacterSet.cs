@@ -245,7 +245,7 @@ public class CharacterSet : MonoBehaviourPun
     private IEnumerator DamagedMove()
     {
         canMove = false;
-        yield return new WaitForSeconds(.5f);
+        yield return new WaitForSeconds(1f);
         canMove = true;
 
     }
@@ -264,7 +264,7 @@ public class CharacterSet : MonoBehaviourPun
 
         foreach (Collider2D enemy in hitEnemies)
         {
-            enemy.GetComponent<CharacterSet>().TakeDamage(currentDamage, currentKnockbackValue, currentKnockupValue, true, isCrouched, false);
+            enemy.GetComponent<CharacterSet>().TakeDamage(currentDamage, currentKnockbackValue, currentKnockupValue, true, isCrouched, false); 
             if(enemy.GetComponent<CharacterSet>().isDefending == false)
             {
                 currentEnergy += .4f;
