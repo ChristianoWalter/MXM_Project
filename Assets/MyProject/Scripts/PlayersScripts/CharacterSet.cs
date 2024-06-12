@@ -373,7 +373,7 @@ public class CharacterSet : MonoBehaviourPun
     {
         isOutStamina = true;
         anim.SetTrigger("OutStamina");
-        yield return new WaitForSeconds(.01f);
+        yield return new WaitForSeconds(.1f);
         isDefending = false;
         canAttack = false;
         canMove = false;

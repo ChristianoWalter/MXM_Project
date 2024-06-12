@@ -83,7 +83,7 @@ public class PlayerController : CharacterSet
     public void SpecialAttackAction(InputAction.CallbackContext value)
     {
         if (!photonView.IsMine) return;
-        if (value.performed)
+        if (value.performed && OnGround() && !isCrouched)
         {
             SpecialAttack();
         }
