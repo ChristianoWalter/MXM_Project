@@ -333,6 +333,7 @@ public class CharacterSet : MonoBehaviourPun
     protected void CallTrigger(string _triggerName)
     {
         anim.SetTrigger(_triggerName);
+        Debug.Log(_triggerName);
     }
 
     //m�todo para anima��es
