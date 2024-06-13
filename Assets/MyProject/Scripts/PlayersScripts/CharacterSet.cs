@@ -185,7 +185,8 @@ public class CharacterSet : MonoBehaviourPun
         else currentAttackPoint = attackPoints[1];
 
         canAttack = false;
-        anim.SetTrigger("Attack");
+        //anim.SetTrigger("Attack"); 
+        photonView.RPC(nameof(CallTrigger), RpcTarget.All, "Attack");
 
         yield return new WaitForSeconds(.1f);
         anim.SetBool("CanGatling", canAttack);
@@ -206,7 +207,8 @@ public class CharacterSet : MonoBehaviourPun
             currentAttackRange = attackRanges[(int)specialAttacks];
             canAttack = false;
             canMove = false;
-            anim.SetTrigger("SpecialAttack");
+            photonView.RPC(nameof(CallTrigger), RpcTarget.All, "SpecialAttack");
+            //anim.SetTrigger("SpecialAttack");
         }
     }
 
@@ -232,13 +234,15 @@ public class CharacterSet : MonoBehaviourPun
             {
                 rb.velocity = new Vector2(_knockback * transform.localScale.x * -1, .5f);
                 StartCoroutine(DamagedMove());
-                anim.SetTrigger("Damaged");
+                photonView.RPC(nameof(CallTrigger), RpcTarget.All, "Damaged");
+                //anim.SetTrigger("Damaged");
             }
             else
             {
                 rb.velocity = new Vector2(_knockback * transform.localScale.x * -1, _knockup);
                 StartCoroutine(DamagedMove());
-                anim.SetTrigger("Damaged");
+                photonView.RPC(nameof(CallTrigger), RpcTarget.All, "Damaged");
+                //anim.SetTrigger("Damaged");
             }
         }
     }
@@ -319,6 +323,13 @@ public class CharacterSet : MonoBehaviourPun
         return Physics2D.OverlapCircle(foot.position, .1f, ground);
     }
 
+    //método RPC para chamar triggers
+    [PunRPC]
+    protected void CallTrigger(string _triggerName)
+    {
+        anim.SetTrigger(_triggerName);
+    }
+
     //m�todo para anima��es
     public void Animations()
     {
@@ -372,13 +383,15 @@ public class CharacterSet : MonoBehaviourPun
     protected IEnumerator OutStamina()
     {
         isOutStamina = true;
-        anim.SetTrigger("OutStamina");
+        photonView.RPC(nameof(CallTrigger), RpcTarget.All, "OutStamina");
+        //anim.SetTrigger("OutStamina");
         yield return new WaitForSeconds(.1f);
         isDefending = false;
         canAttack = false;
         canMove = false;
         yield return new WaitForSeconds(timeStuned);
-        anim.SetTrigger("Recharged");
+        photonView.RPC(nameof(CallTrigger), RpcTarget.All, "Recharged");
+        //anim.SetTrigger("Recharged");
         canAttack = true; 
         canMove = true;
         isOutStamina = false;
