@@ -230,7 +230,12 @@ public class CharacterSet : MonoBehaviourPun
         }
         else
         {
-            if (!OnGround() && _knockup <= 0)
+            rb.velocity = new Vector2(_knockback * transform.localScale.x * -1, _knockup);
+            StartCoroutine(DamagedMove());
+            photonView.RPC(nameof(CallTrigger), RpcTarget.All, "Damaged");
+            //anim.SetTrigger("Damaged");
+
+            /*if (!OnGround() && _knockup <= 0)
             {
                 rb.velocity = new Vector2(_knockback * transform.localScale.x * -1, .5f);
                 StartCoroutine(DamagedMove());
@@ -243,7 +248,7 @@ public class CharacterSet : MonoBehaviourPun
                 StartCoroutine(DamagedMove());
                 photonView.RPC(nameof(CallTrigger), RpcTarget.All, "Damaged");
                 //anim.SetTrigger("Damaged");
-            }
+            }*/
         }
     }
 
