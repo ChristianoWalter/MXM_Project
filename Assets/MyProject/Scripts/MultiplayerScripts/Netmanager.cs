@@ -13,7 +13,8 @@ public class Netmanager : MonoBehaviourPunCallbacks
     [SerializeField] GameObject menuScreen;
     public GameObject loadingScreen;
 
-    
+    [SerializeField] int playerCount = 2;
+
     [HideInInspector] public Transform cameraPlayer;
 
 
@@ -55,7 +56,10 @@ public class Netmanager : MonoBehaviourPunCallbacks
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
         Debug.Log("OnJoinRandomFailed");
-        PhotonNetwork.CreateRoom(null);
+        RoomOptions options = new RoomOptions();
+        options.MaxPlayers = (byte)playerCount;
+
+        PhotonNetwork.CreateRoom(null, options);
     }
 
     public override void OnCreatedRoom()

@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     [SerializeField] GameObject gameScreen;
 
+
     private void Awake()
     {
         instance = this;

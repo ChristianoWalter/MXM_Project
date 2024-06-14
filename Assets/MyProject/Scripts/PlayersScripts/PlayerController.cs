@@ -17,13 +17,15 @@ public class PlayerController : CharacterSet
         //execução do método mãe
         base.Awake();
         //seleção da layer do adiversário com base na do player (layer de aplicação do dano)
-        if (gameObject.layer == 6)
+        if (photonView.IsMine)
         {
+            gameObject.layer = 6;
             oponentLayer = LayerMask.GetMask("PlayerTwo");
             gameObject.tag = "Player";
         }
-        else if (gameObject.layer == 7)
+        else
         {
+            gameObject.layer = 7;
             oponentLayer = LayerMask.GetMask("PlayerOne");
             gameObject.tag = "PlayerTwo";
         }
