@@ -8,6 +8,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] GameObject playerObject;
 
+
     private void Start()
     {
         PhotonNetwork.ConnectUsingSettings();
@@ -15,14 +16,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnConnectedToMaster()
     {
-        Debug.Log("On Conected To Master");
+        Debug.Log("On Connected To Master");
         PhotonNetwork.JoinLobby();
     }
 
     public override void OnJoinedLobby()
     {
         Debug.Log("Joined Lobby");
-        PhotonNetwork.JoinRandomRoom();
+        //PhotonNetwork.JoinRandomRoom();
         //PhotonNetwork.CreateRoom("GameRoom");
     }
 
@@ -38,10 +39,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Debug.Log("CreatRoomFailed");
     }
 
-    //método chamado ao entrar em uma sala
+    //mï¿½todo chamado ao entrar em uma sala
     public override void OnJoinedRoom()
     {
-        photonView.RPC("CreatePlayer", PhotonNetwork.LocalPlayer);
+        //photonView.RPC("CreatePlayer", PhotonNetwork.LocalPlayer);
     }
 
     [PunRPC]
