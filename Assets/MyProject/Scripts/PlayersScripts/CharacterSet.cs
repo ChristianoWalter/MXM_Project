@@ -187,6 +187,7 @@ public class CharacterSet : MonoBehaviourPun
         canAttack = false;
         //anim.SetTrigger("Attack"); 
         photonView.RPC(nameof(CallTrigger), RpcTarget.All, "Attack");
+        gatlingCombo++;
 
         yield return new WaitForSeconds(.1f);
         anim.SetBool("CanGatling", canAttack);
@@ -278,6 +279,7 @@ public class CharacterSet : MonoBehaviourPun
             if(enemy.GetComponent<CharacterSet>().isDefending == false)
             {
                 currentEnergy += .4f;
+                GatlingActivate();
             }
         }
     }
@@ -313,8 +315,6 @@ public class CharacterSet : MonoBehaviourPun
         if (gatlingCombo < 2)
         {
             canAttack = true;
-            //anim.SetBool("CanGatling", canAttack);
-            gatlingCombo++;
             Debug.Log(gatlingCombo);
         }
         else canAttack = false; 

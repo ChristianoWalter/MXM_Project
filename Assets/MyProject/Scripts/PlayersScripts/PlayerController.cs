@@ -16,22 +16,25 @@ public class PlayerController : CharacterSet
     {
         //execução do método mãe
         base.Awake();
+
         //seleção da layer do adiversário com base na do player (layer de aplicação do dano)
-        if (photonView.IsMine)
+        if (PhotonNetwork.PlayerList[0] == PhotonNetwork.LocalPlayer)
         {
+            oponentDirection = GameManager.instance.playerPrefabTeamBlue.transform;
             gameObject.layer = 6;
             oponentLayer = LayerMask.GetMask("PlayerTwo");
             gameObject.tag = "Player";
         }
         else
         {
+            oponentDirection = GameManager.instance.playerPrefabTeamRed.transform;
             gameObject.layer = 7;
             oponentLayer = LayerMask.GetMask("PlayerOne");
             gameObject.tag = "PlayerTwo";
         }
-        
-        if (!photonView.IsMine) return;
-        canInputJump = true;
+
+        if (photonView.IsMine) canInputJump = true;
+        else rb.isKinematic = true;
     }
 
     protected override void Update()
