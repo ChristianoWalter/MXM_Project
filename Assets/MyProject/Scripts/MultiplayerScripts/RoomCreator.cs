@@ -22,7 +22,7 @@ public class RoomCreator : MonoBehaviourPunCallbacks
     private void CreateRoom()
     {
         RoomOptions roomOptions = new RoomOptions{IsVisible = true, MaxPlayers = 2};
-        if(PhotonNetwork.CreateRoom(inputField.text, roomOptions))
+        if(PhotonNetwork.CreateRoom("Sala:" + inputField.text + " De:" + PhotonNetwork.LocalPlayer.NickName, roomOptions))
         {
             return;
         }
