@@ -12,14 +12,8 @@ public class RoomCreator : MonoBehaviourPunCallbacks
 {
   
     [SerializeField] private TMP_InputField inputField;
-    [SerializeField] private Button btn;
 
-    private void Start()
-    {
-        btn.onClick.AddListener(CreateRoom);
-    }
-
-    private void CreateRoom()
+    public void CreateRoom()
     {
         RoomOptions roomOptions = new RoomOptions{IsVisible = true, MaxPlayers = 2};
         if(PhotonNetwork.CreateRoom("Sala:" + inputField.text + " De:" + PhotonNetwork.LocalPlayer.NickName, roomOptions))

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
@@ -35,7 +36,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     void CreateAvatar()
     {
-        PhotonNetwork.LocalPlayer.NickName = Netmanager.instance.inputNickname.text;
+        //PhotonNetwork.LocalPlayer.NickName = Netmanager.instance.inputNickname.text;
 
         if (PhotonNetwork.PlayerList[0] == PhotonNetwork.LocalPlayer)
         {
@@ -49,23 +50,17 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
 
         gameScreen.SetActive(true);
-        Netmanager.instance.loadingScreen.SetActive(false);
-    }
 
-    [PunRPC]
-    void CreatePlayerAvatar(string nickname)
-    {
-        PhotonNetwork.LocalPlayer.NickName = nickname;
-
-        if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
+        if (Netmanager.instance != null)
         {
-            Vector3 _pos = new Vector3(-2f, 0f, 0f);
-            PhotonNetwork.Instantiate(playerPrefabTeamRed.name, _pos, Quaternion.identity);
+            Netmanager.instance.loadingScreen.SetActive(false);
+            PhotonNetwork.LocalPlayer.NickName = Netmanager.instance.inputNickname.text;
         }
-        else
+
+        if (NetworkManager.instance != null)
         {
-            Vector3 _pos = new Vector3(2f, 0f, 0f);
-            PhotonNetwork.Instantiate(playerPrefabTeamBlue.name, _pos, Quaternion.identity);
+            NetworkManager.instance.loadingScreen.SetActive(false);
         }
     }
+
 }
