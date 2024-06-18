@@ -20,14 +20,14 @@ public class PlayerController : CharacterSet
         //seleção da layer do adiversário com base na do player (layer de aplicação do dano)
         if (PhotonNetwork.PlayerList[0] == PhotonNetwork.LocalPlayer)
         {
-            oponentDirection = GameManager.instance.playerPrefabTeamBlue.transform;
+            //oponentDirection = GameManager.instance.playerTwoPrefab.transform;
             gameObject.layer = 6;
             oponentLayer = LayerMask.GetMask("PlayerTwo");
             gameObject.tag = "Player";
         }
         else
         {
-            oponentDirection = GameManager.instance.playerPrefabTeamRed.transform;
+            //oponentDirection = GameManager.instance.playerOnePrefab.transform;
             gameObject.layer = 7;
             oponentLayer = LayerMask.GetMask("PlayerOne");
             gameObject.tag = "PlayerTwo";

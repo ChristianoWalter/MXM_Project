@@ -408,7 +408,7 @@ PrefabInstance:
       objectReference: {fileID: 644507434}
     - target: {fileID: 6266221403495795216, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
       propertyPath: sceneViewId
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6674772443756674962, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -449,6 +449,18 @@ PrefabInstance:
     - target: {fileID: 6674772443756674962, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7263147003563397693, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
+      propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7263147003563397693, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
+      propertyPath: observableSearch
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7263147003563397693, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
+      propertyPath: ObservedComponents.Array.size
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

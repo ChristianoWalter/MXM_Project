@@ -9,8 +9,13 @@ public class GameManager : MonoBehaviourPunCallbacks
 {
     public static GameManager instance;
 
-    [SerializeField] public GameObject playerPrefabTeamRed;
-    [SerializeField] public GameObject playerPrefabTeamBlue;
+    [SerializeField] GameObject placeholderPrefab;
+    [SerializeField] GameObject keeperPrefab;
+
+    [SerializeField] public GameObject playerOnePrefab;
+    [SerializeField] public GameObject playerPrefab;
+    [SerializeField] public GameObject playerTwoPrefab;
+    public List<PlayerController> playersInGame = new List<PlayerController>();
     [HideInInspector] public Transform cameraPlayer;
 
     [SerializeField] GameObject gameScreen;
@@ -28,10 +33,9 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
         {
-            photonView.RPC(nameof(CreateAvatar), RpcTarget.AllBuffered);
+            photonView.RPC(nameof(CreatePlayer), RpcTarget.AllBuffered);
         }
     }
-
 
     [PunRPC]
     void CreateAvatar()
@@ -41,12 +45,13 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.PlayerList[0] == PhotonNetwork.LocalPlayer)
         {
             Vector3 _pos = new Vector2(-2f, 0f);
-            PhotonNetwork.Instantiate(playerPrefabTeamRed.name, _pos, Quaternion.identity);
+             var _player = PhotonNetwork.Instantiate(playerPrefab.name, _pos, Quaternion.identity);
+            playersInGame.Add(_player.GetComponent<PlayerController>());
         }
         else
         {
             Vector3 _pos = new Vector2(2f, 0f);
-            PhotonNetwork.Instantiate(playerPrefabTeamBlue.name, _pos, Quaternion.identity);
+            PhotonNetwork.Instantiate(playerPrefab.name, _pos, Quaternion.identity);
         }
 
         gameScreen.SetActive(true);
@@ -60,6 +65,38 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (NetworkManager.instance != null)
         {
             NetworkManager.instance.loadingScreen.SetActive(false);
+            NetworkManager.instance.generalMenusScreen.SetActive(false);
+        }
+    }
+    
+    [PunRPC]
+    void CreatePlayer()
+    {
+        //PhotonNetwork.LocalPlayer.NickName = Netmanager.instance.inputNickname.text;
+
+        if (PhotonNetwork.PlayerList[0] == PhotonNetwork.LocalPlayer)
+        {
+            Vector3 _pos = new Vector2(-2f, 0f);
+             playerOnePrefab = PhotonNetwork.Instantiate(playerPrefab.name, _pos, Quaternion.identity);
+        }
+        else
+        {
+            Vector3 _pos = new Vector2(2f, 0f);
+            playerTwoPrefab = PhotonNetwork.Instantiate(playerPrefab.name, _pos, Quaternion.identity);
+        }
+
+        gameScreen.SetActive(true);
+
+        if (Netmanager.instance != null)
+        {
+            Netmanager.instance.loadingScreen.SetActive(false);
+            PhotonNetwork.LocalPlayer.NickName = Netmanager.instance.inputNickname.text;
+        }
+
+        if (NetworkManager.instance != null)
+        {
+            NetworkManager.instance.loadingScreen.SetActive(false);
+            NetworkManager.instance.generalMenusScreen.SetActive(false);
         }
     }
 
