@@ -528,6 +528,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3930887138553613389, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
+      propertyPath: playersInGame.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4893414516489943349, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
       propertyPath: m_Name
       value: GameManager
@@ -536,6 +540,22 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 644507434}
+    - target: {fileID: 5477262554013265665, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5477262554013265665, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: SelectCharacter
+      objectReference: {fileID: 0}
+    - target: {fileID: 5477262554013265665, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 7295895933586343584, guid: fbb4b4e669624b64db1bbefd10bdb09e, type: 3}
+    - target: {fileID: 5477262554013265665, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.GameObject, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 6266221403495795216, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
       propertyPath: sceneViewId
       value: 1
@@ -586,7 +606,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7141692191619458318, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 2.000702
+      value: 2.0006104
       objectReference: {fileID: 0}
     - target: {fileID: 7263147003563397693, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
       propertyPath: sceneViewId

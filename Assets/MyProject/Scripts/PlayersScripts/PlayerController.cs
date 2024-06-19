@@ -9,6 +9,8 @@ public class PlayerController : CharacterSet
 {
     Player photonPlayer;
 
+    public bool isInMatch = true;
+
         //variável para evitar que o jogador pule sempre que mudar de direção com o botão pressionado
     bool canInputJump;
 
@@ -17,29 +19,13 @@ public class PlayerController : CharacterSet
         //execução do método mãe
         base.Awake();
 
-        //seleção da layer do adiversário com base na do player (layer de aplicação do dano)
-        if (PhotonNetwork.PlayerList[0] == PhotonNetwork.LocalPlayer)
-        {
-            //oponentDirection = GameManager.instance.playerTwoPrefab.transform;
-            gameObject.layer = 6;
-            oponentLayer = LayerMask.GetMask("PlayerTwo");
-            gameObject.tag = "Player";
-        }
-        else
-        {
-            //oponentDirection = GameManager.instance.playerOnePrefab.transform;
-            gameObject.layer = 7;
-            oponentLayer = LayerMask.GetMask("PlayerOne");
-            gameObject.tag = "PlayerTwo";
-        }
-
         if (photonView.IsMine) canInputJump = true;
         else rb.isKinematic = true;
     }
 
     protected override void Update()
     {
-
+        if (!isInMatch) return;
         base.Update();
 
         if (!photonView.IsMine) return;
@@ -48,6 +34,19 @@ public class PlayerController : CharacterSet
         if (canMove) rb.velocity = new Vector2(inputDirection.x * moveSpeed, rb.velocity.y);
         else if (!canMove || isDefending) rb.velocity = new Vector2(0f, rb.velocity.y);
 
+    }
+
+    protected override void Death()
+    {
+        photonView.RPC(nameof(StopPlayer), RpcTarget.AllBuffered);
+        if (!photonView.IsMine) return;
+        GameManager.instance.GameOver();
+    }
+
+    [PunRPC]
+    void StopPlayer()
+    {
+        isInMatch = false;
     }
 
     #region inputs de ataque
@@ -142,14 +141,6 @@ public class PlayerController : CharacterSet
             canInputJump = false;
             Debug.Log("cima");
         }
-
-        //ação de agachar
-        /*if (inputDirection.y < 0 && canCrouch)
-        {
-            Crouch();
-            canCrouch = false;
-            Debug.Log("baixo");
-        }*/
 
             //input out
         if (value.canceled)

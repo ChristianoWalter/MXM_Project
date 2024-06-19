@@ -18,32 +18,24 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [SerializeField] Button startMatchBtn;
     [SerializeField] TextMeshProUGUI startMatchBtTxt;
     [SerializeField] Button[] buttons;
-    private int playersReady;
+    public GameObject currentCharacter;
     private bool playerOneIsReady;
     private bool playerTwoIsReady;
-    private bool selectedACharacter;
 
     [Header("Telas de menu")]
-    //variável para gameobject pai de todas as telas de menu
-    public GameObject generalMenusScreen;
     [SerializeField] GameObject mainMenuScreen;
     [SerializeField] GameObject lobbyScreen;
     [SerializeField] GameObject loadingScreen;
     [SerializeField] GameObject gameRoomScreen;
     [SerializeField] GameObject newRoomScreen;
     [SerializeField] GameObject playerUiScreen;
+    [SerializeField] GameObject victoryScreen;
+    [SerializeField] GameObject defeatScreen;
 
     [Header("Inputs para inserção de texto")]
     [SerializeField] TMP_InputField nicknameInput;
     [SerializeField] private TMP_InputField roomInput;
 
-    public enum Characters
-    {
-        placeholder,
-        keeper
-    }
-
-    public Characters selectedCharacter;
 
     private void Awake()
     {
@@ -84,6 +76,18 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.LocalPlayer.NickName = nicknameInput.text;
     }
 
+    public void SelectCharacter(GameObject _character)
+    {
+        currentCharacter = _character;
+
+        if (PhotonNetwork.PlayerList[0] == PhotonNetwork.LocalPlayer)
+        {
+            if (playerTwoIsReady) startMatchBtn.interactable = true;
+            photonView.RPC(nameof(Ready), RpcTarget.AllBuffered);
+        }        
+        else startMatchBtn.interactable = true;
+    }
+
     public void StartMatch()
     {
         if (PhotonNetwork.PlayerList[0] == PhotonNetwork.LocalPlayer)
@@ -102,7 +106,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
     #endregion
 
-    //região destinada a métodos do photon para conexão online
+    //região destinada a métodos do photon automáticos para conexão online
     #region Photon methods
     public override void OnConnectedToMaster()
     {
@@ -129,7 +133,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Debug.Log("joinedRoom");
         LoadScreen(3);
         startMatchBtn.interactable = false;
-        playersReady = 0;
         if (PhotonNetwork.PlayerList[0] == PhotonNetwork.LocalPlayer)
         {
             startMatchBtTxt.text = "Começar partida";
@@ -138,42 +141,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         { 
             startMatchBtTxt.text = "Pronto";
         }
-
-        /*if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
-        {
-            photonView.RPC(nameof(LoadLevel), RpcTarget.AllBuffered);
-
-            GameManager.instance.StartGame();
-        }*/
-        //photonView.RPC("CreatePlayer", PhotonNetwork.LocalPlayer);
     }
 
     #endregion
-
-    public void SelectedACharacter()
-    {
-        photonView.RPC(nameof(Ready), RpcTarget.MasterClient);
-    }
     
-    public void SelectedCharacter(int _characterSelected)
-    {
-        switch (_characterSelected)
-        {
-            case 0:
-                selectedCharacter = Characters.placeholder; 
-                break;
-            case 1:
-                selectedCharacter = Characters.keeper;
-                break;
-        }
-
-        if (PhotonNetwork.PlayerList[0] == PhotonNetwork.LocalPlayer)
-        {
-            if (playerTwoIsReady) startMatchBtn.interactable = true;
-            photonView.RPC(nameof(Ready), RpcTarget.AllBuffered);
-        }        
-        else startMatchBtn.interactable = true;
-    }
 
     [PunRPC]
     public void Ready()
@@ -208,6 +179,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         gameRoomScreen.SetActive(false);
         newRoomScreen.SetActive(false);
         playerUiScreen.SetActive(false);
+        victoryScreen.SetActive(false);
+        defeatScreen.SetActive(false);
 
         switch (screenIndex)
         {
@@ -228,6 +201,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 break;
             case 5:
                 playerUiScreen.SetActive(true);
+                break;
+            case 6:
+                playerUiScreen.SetActive(true);
+                victoryScreen.SetActive(true);
+                break;
+            case 7:
+                playerUiScreen.SetActive(true);
+                defeatScreen.SetActive(true);
                 break;
         }
     }

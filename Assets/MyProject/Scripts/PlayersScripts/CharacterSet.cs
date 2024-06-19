@@ -87,6 +87,41 @@ public class CharacterSet : MonoBehaviourPun
 
     protected virtual void Awake()
     {
+        //seleção da layer do adiversário com base na do player (layer de aplicação do dano)
+        if (PhotonNetwork.PlayerList[0] == PhotonNetwork.LocalPlayer)
+        {
+            if (photonView.IsMine)
+            {
+                //oponentDirection = GameManager.instance.playerTwoPrefab.transform;
+                gameObject.layer = 6;
+                oponentLayer = LayerMask.GetMask("PlayerTwo");
+                gameObject.tag = "Player";
+            }
+            else
+            {
+                gameObject.layer = 7;
+                oponentLayer = LayerMask.GetMask("PlayerOne");
+                gameObject.tag = "PlayerTwo";
+            }
+        }
+        else
+        {
+            if (photonView.IsMine)
+            {
+                //oponentDirection = GameManager.instance.playerOnePrefab.transform;
+                gameObject.layer = 7;
+                oponentLayer = LayerMask.GetMask("PlayerOne");
+                gameObject.tag = "PlayerTwo";
+            }
+            else
+            {
+                gameObject.layer = 6;
+                oponentLayer = LayerMask.GetMask("PlayerTwo");
+                gameObject.tag = "Player";
+            }
+            
+        }
+
         currentHealth = maxHealth;
         //healthBar.SetMaxHealth(maxHealth);
         currentDefenseShield = maxDefenseShield;
@@ -216,7 +251,7 @@ public class CharacterSet : MonoBehaviourPun
 
 
     //m�todo de morte
-    public void Death()
+    protected virtual void Death()
     {
 
     }
