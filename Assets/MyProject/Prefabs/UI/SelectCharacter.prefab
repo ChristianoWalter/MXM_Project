@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 1431685691163583584}
   - component: {fileID: 4758402819236267020}
   - component: {fileID: 5440513170123639635}
-  - component: {fileID: 4503093662118521844}
   - component: {fileID: 7154057159089157743}
   m_Layer: 5
   m_Name: SelectCharacter
@@ -122,10 +121,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4503093662118521844}
-        m_TargetAssemblyTypeName: SelectCharacterScript, Assembly-CSharp
-        m_MethodName: SelectCharacter
-        m_Mode: 1
+      - m_Target: {fileID: 5440513170123639635}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
+        m_MethodName: set_interactable
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -134,21 +133,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &4503093662118521844
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3527719294002939417}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c30b3ae6bf916cb4084ccdf029eb0203, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterSelected: {fileID: 7295895933586343584, guid: fbb4b4e669624b64db1bbefd10bdb09e, type: 3}
-  btn: {fileID: 5440513170123639635}
-  otherBtns: []
 --- !u!114 &7154057159089157743
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -15,18 +15,23 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [Header("Configurações e itens da sala de jogo")]
     //variável para nome da cena/level a ser carregado
     [SerializeField] string sceneName;
-    public Button startMatchBtn;
+    [SerializeField] Button startMatchBtn;
     [SerializeField] TextMeshProUGUI startMatchBtTxt;
+    [SerializeField] Button[] buttons;
     private int playersReady;
+    private bool playerOneIsReady;
     private bool playerTwoIsReady;
+    private bool selectedACharacter;
 
     [Header("Telas de menu")]
     //variável para gameobject pai de todas as telas de menu
     public GameObject generalMenusScreen;
+    [SerializeField] GameObject mainMenuScreen;
     [SerializeField] GameObject lobbyScreen;
-    public GameObject loadingScreen;
-    public GameObject gameRoomScreen;
-    public GameObject waitingScreen;
+    [SerializeField] GameObject loadingScreen;
+    [SerializeField] GameObject gameRoomScreen;
+    [SerializeField] GameObject newRoomScreen;
+    [SerializeField] GameObject playerUiScreen;
 
     [Header("Inputs para inserção de texto")]
     [SerializeField] TMP_InputField nicknameInput;
@@ -34,20 +39,18 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public enum Characters
     {
-        Placeholder,
-        Keeper
+        placeholder,
+        keeper
     }
 
     public Characters selectedCharacter;
-
 
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
-            generalMenusScreen.SetActive(true);
-            loadingScreen.SetActive(false);
+            LoadScreen(0);
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -76,8 +79,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     //método para atrelar ao botão e se conectar ao server
     public void PlayGame()
     {
-        loadingScreen.SetActive(true);
-        generalMenusScreen.SetActive(false);
+        LoadScreen(2);
         PhotonNetwork.ConnectUsingSettings();
         PhotonNetwork.LocalPlayer.NickName = nicknameInput.text;
     }
@@ -88,12 +90,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
             {
+                //photonView.RPC(nameof(LoadLevel), RpcTarget.AllBuffered);
                 GameManager.instance.StartGame();
             }
         }
         else
         {
-            photonView.RPC(nameof(Ready), RpcTarget.MasterClient);
+            startMatchBtn.interactable = false;
+            photonView.RPC(nameof(Ready), RpcTarget.AllBuffered);
         }        
     }
     #endregion
@@ -109,24 +113,21 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         Debug.Log("Joined Lobby");
-        loadingScreen.SetActive(false);
-        generalMenusScreen.SetActive(true);
-        //PhotonNetwork.JoinRandomRoom();
-        //PhotonNetwork.CreateRoom("GameRoom");
+        LoadScreen(1);
     }
 
 
     public override void OnCreatedRoom()
     {
         Debug.Log("Created Room");
-        loadingScreen.SetActive(true);
+        LoadScreen(2);
     }
 
     //m�todo chamado ao entrar em uma sala
     public override void OnJoinedRoom()
     {
         Debug.Log("joinedRoom");
-        gameRoomScreen.SetActive(true);
+        LoadScreen(3);
         startMatchBtn.interactable = false;
         playersReady = 0;
         if (PhotonNetwork.PlayerList[0] == PhotonNetwork.LocalPlayer)
@@ -137,8 +138,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         { 
             startMatchBtTxt.text = "Pronto";
         }
-        loadingScreen.SetActive(false);
-        lobbyScreen.SetActive(false);
 
         /*if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
         {
@@ -156,37 +155,87 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         photonView.RPC(nameof(Ready), RpcTarget.MasterClient);
     }
     
-    public void SelectedCharacter()
+    public void SelectedCharacter(int _characterSelected)
     {
-        photonView.RPC(nameof(Ready), RpcTarget.MasterClient);
+        switch (_characterSelected)
+        {
+            case 0:
+                selectedCharacter = Characters.placeholder; 
+                break;
+            case 1:
+                selectedCharacter = Characters.keeper;
+                break;
+        }
+
+        if (PhotonNetwork.PlayerList[0] == PhotonNetwork.LocalPlayer)
+        {
+            if (playerTwoIsReady) startMatchBtn.interactable = true;
+            photonView.RPC(nameof(Ready), RpcTarget.AllBuffered);
+        }        
+        else startMatchBtn.interactable = true;
     }
 
     [PunRPC]
     public void Ready()
     {
-        if (playersReady == 2)
+        if (playerOneIsReady)
         {
-            startMatchBtn.interactable = true;
+            photonView.RPC(nameof(ActivateBtn), RpcTarget.MasterClient);
+        }
+
+        if (PhotonNetwork.PlayerList[0] == PhotonNetwork.LocalPlayer)
+        {
+            playerOneIsReady = true;
         }
         else
         {
-            playersReady++;
+            playerTwoIsReady = true;
         }
+    }
 
-        /*if (GameManager.instance.playerOnePrefab != null && GameManager.instance.playerTwoPrefab != null)
+    [PunRPC]
+    void ActivateBtn()
+    {
+        startMatchBtn.interactable = true;
+    }
+
+    //método para seleção e fluxo de telas
+    public void LoadScreen(int screenIndex)
+    {
+        mainMenuScreen.SetActive(false);
+        lobbyScreen.SetActive(false);
+        loadingScreen.SetActive(false);
+        gameRoomScreen.SetActive(false);
+        newRoomScreen.SetActive(false);
+        playerUiScreen.SetActive(false);
+
+        switch (screenIndex)
         {
-            if (playerTwoIsReady) startMatchBtn.interactable = true;
+            case 0:
+                mainMenuScreen.SetActive(true);
+                break;
+            case 1:
+                lobbyScreen.SetActive(true);
+                break;
+            case 2:
+                loadingScreen.SetActive(true);
+                break;
+            case 3:
+                gameRoomScreen.SetActive(true); 
+                break;
+            case 4:
+                newRoomScreen.SetActive(true); 
+                break;
+            case 5:
+                playerUiScreen.SetActive(true);
+                break;
         }
-
-        if (PhotonNetwork.PlayerList[0] != PhotonNetwork.LocalPlayer && !playerTwoIsReady) playerTwoIsReady = true;*/
     }
 
     [PunRPC]
     public void LoadLevel()
     {
-        //SceneManager.LoadScene(sceneName);
-        waitingScreen.SetActive(false);
-        generalMenusScreen.SetActive(false);
-        loadingScreen.SetActive(true);
+        LoadScreen(2);
+        SceneManager.LoadScene(sceneName);
     }
 }

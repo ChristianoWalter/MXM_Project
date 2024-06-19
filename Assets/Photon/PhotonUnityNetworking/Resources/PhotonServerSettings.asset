@@ -49,6 +49,10 @@ MonoBehaviour:
   - SetAllCharacters
   - SelectCharacter
   - SetCharacter
+  - ActivateBtn
+  - SpawnCharacter
+  - SpawnCharacterPOne
+  - SpawnCharacterPTwo
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

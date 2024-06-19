@@ -17,7 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/MyProject/Scenes/Lobby.unity
     guid: 5790691f5dc012c4f8c8b27f2a824d0d
-  - enabled: 1
+  - enabled: 0
     path: Assets/MyProject/Scenes/GameTest.unity
     guid: 050b6d56eff48e44a91cae38e045bfb7
   m_configObjects:

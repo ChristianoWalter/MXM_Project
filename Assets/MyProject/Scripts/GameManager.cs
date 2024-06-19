@@ -20,11 +20,21 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     [SerializeField] GameObject gameScreen;
 
+    public NetworkManager.Characters characterToSpawn;
 
     private void Awake()
     {
         instance = this;
-        gameScreen.SetActive(false);
+        //gameScreen.SetActive(false);
+    }
+
+    private void Start()
+    {
+        /*NetworkManager.instance.LoadScreen(5);
+        
+        characterToSpawn = NetworkManager.instance.selectedCharacter;
+
+        StartGame();*/
     }
 
     public void StartGame()
@@ -41,6 +51,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     void CreateAvatar()
     {
         //PhotonNetwork.LocalPlayer.NickName = Netmanager.instance.inputNickname.text;
+        NetworkManager.instance.LoadScreen(5);
 
         if (PhotonNetwork.PlayerList[0] == PhotonNetwork.LocalPlayer)
         {
@@ -54,7 +65,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             PhotonNetwork.Instantiate(playerPrefab.name, _pos, Quaternion.identity);
         }
 
-        gameScreen.SetActive(true);
+        //gameScreen.SetActive(true);
 
         if (Netmanager.instance != null)
         {
@@ -64,7 +75,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (NetworkManager.instance != null)
         {
-            NetworkManager.instance.loadingScreen.SetActive(false);
+            //NetworkManager.instance.loadingScreen.SetActive(false);
             NetworkManager.instance.generalMenusScreen.SetActive(false);
         }
     }
@@ -72,32 +83,30 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     void CreatePlayer()
     {
+        characterToSpawn = NetworkManager.instance.selectedCharacter;
+        switch (characterToSpawn)
+        {
+            case NetworkManager.Characters.placeholder:
+                playerPrefab = placeholderPrefab;
+                Debug.Log("placeholder");
+                break;
+            case NetworkManager.Characters.keeper:
+                playerPrefab = keeperPrefab;
+                Debug.Log("keeper");
+                break;
+        }
         //PhotonNetwork.LocalPlayer.NickName = Netmanager.instance.inputNickname.text;
+        NetworkManager.instance.LoadScreen(5);
 
         if (PhotonNetwork.PlayerList[0] == PhotonNetwork.LocalPlayer)
         {
             Vector3 _pos = new Vector2(-2f, 0f);
-             playerOnePrefab = PhotonNetwork.Instantiate(playerPrefab.name, _pos, Quaternion.identity);
+            playerOnePrefab = PhotonNetwork.Instantiate(playerPrefab.name, _pos, Quaternion.identity);
         }
         else
         {
             Vector3 _pos = new Vector2(2f, 0f);
             playerTwoPrefab = PhotonNetwork.Instantiate(playerPrefab.name, _pos, Quaternion.identity);
         }
-
-        gameScreen.SetActive(true);
-
-        if (Netmanager.instance != null)
-        {
-            Netmanager.instance.loadingScreen.SetActive(false);
-            PhotonNetwork.LocalPlayer.NickName = Netmanager.instance.inputNickname.text;
-        }
-
-        if (NetworkManager.instance != null)
-        {
-            NetworkManager.instance.loadingScreen.SetActive(false);
-            NetworkManager.instance.generalMenusScreen.SetActive(false);
-        }
     }
-
 }

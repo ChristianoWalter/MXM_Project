@@ -23,14 +23,6 @@ public class SelectCharacterScript : MonoBehaviourPunCallbacks
     public void SelectCharacter()
     {
         btn.interactable = false;
-        //photonView.RPC(nameof(SetCharacter), RpcTarget.AllBuffered);
-        //GameManager.instance.playerPrefab = characterSelected;
-        if (!alreadyHasSelect)
-        {
-            NetworkManager.instance.SelectedCharacter();
-            alreadyHasSelect = true;
-            //if (PhotonNetwork.PlayerList[0] != PhotonNetwork.LocalPlayer) NetworkManager.instance.startMatchBtn.interactable = true;
-        }
     }
 
     [PunRPC]
