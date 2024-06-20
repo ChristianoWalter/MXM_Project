@@ -171,20 +171,20 @@ public class CharacterSet : MonoBehaviourPun
                 if (_midAttack || _crouchAttack == isCrouched)
                 {
                     currentHealth = Mathf.Max(currentHealth - _damage * defenseDecrement, 0);
-                    currentEnergy = Mathf.Clamp(currentHealth + .1f, 0, maxEnergy);
+                    currentEnergy = Mathf.Clamp(currentEnergy + .1f, 0, maxEnergy);
                     defendDamage = true;
                 }
                 else
                 {
                     currentHealth = Mathf.Max(currentHealth - _damage, 0);
-                    currentEnergy = Mathf.Clamp(currentHealth + .2f, 0, maxEnergy);
+                    currentEnergy = Mathf.Clamp(currentEnergy + .2f, 0, maxEnergy);
                     defendDamage = false;
                 }
             }
             else
             {
                 currentHealth = Mathf.Max(currentHealth - _damage, 0);
-                currentEnergy = Mathf.Clamp(currentHealth + .2f, 0, maxEnergy);
+                currentEnergy = Mathf.Clamp(currentEnergy + .2f, 0, maxEnergy);
                 defendDamage = false;
             }
             Debug.Log(currentHealth);
@@ -250,7 +250,7 @@ public class CharacterSet : MonoBehaviourPun
         if (canAttack && currentEnergy >= energyCost[(int)specialAttacks] && OnGround())
         {
             currentAttackPoint = attackPoints[0];
-            currentEnergy -= energyCost[(int)specialAttacks];//Mathf.Max(currentHealth - energyCost[(int)specialAttacks], 0);
+            currentEnergy = Mathf.Max(currentEnergy - energyCost[(int)specialAttacks], 0);
             anim.SetInteger("AttackType", (int)specialAttacks);
             gatlingCombo = 1;
             currentKnockupValue = specialKnockupValues[(int)specialAttacks];
@@ -329,7 +329,7 @@ public class CharacterSet : MonoBehaviourPun
             enemy.GetComponent<CharacterSet>().TakeDamage(currentDamage, currentKnockbackValue, currentKnockupValue, true, isCrouched, false); 
             if(enemy.GetComponent<CharacterSet>().isDefending == false)
             {
-                currentEnergy = Mathf.Clamp(currentHealth + .4f, 0, maxEnergy);
+                currentEnergy = Mathf.Clamp(currentEnergy + .4f, 0, maxEnergy);
                 energyBar.UpdateValue(currentEnergy);
                 GatlingActivate();
             }
