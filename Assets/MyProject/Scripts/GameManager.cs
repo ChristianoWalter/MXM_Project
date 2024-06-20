@@ -5,6 +5,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
@@ -13,6 +14,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] public GameObject playerPrefab;
     [SerializeField] public GameObject playerOnePrefab;
     [SerializeField] public GameObject playerTwoPrefab;
+
     bool youLose;
     public List<PlayerController> playersInGame = new List<PlayerController>();
 
@@ -47,17 +49,19 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         if (youLose)
         {
-            NetworkManager.instance.LoadScreen(7);
+            NetworkManager.instance.LoadScreen(8);
         }
         else
         {
-            NetworkManager.instance.LoadScreen(6);
+            NetworkManager.instance.LoadScreen(7);
         }
     }
 
     [PunRPC]
     void CreatePlayer()
     {
+        
+
         playerPrefab = NetworkManager.instance.currentCharacter;
         NetworkManager.instance.LoadScreen(5);
 
