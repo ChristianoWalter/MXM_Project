@@ -11,6 +11,7 @@ public class CharacterSet : MonoBehaviourPun
     [SerializeField] protected bool isInvencible;
     [SerializeField] float maxHealth;
     [SerializeField] HealthBar healthBar;
+    [SerializeField] EnergyBar energyBar;
     //Est� em serializefield para testes de funcionamento, ap�s testado e aprovado remover o serializefield
     public float currentHealth;
 
@@ -87,6 +88,11 @@ public class CharacterSet : MonoBehaviourPun
 
     protected virtual void Awake()
     {
+        currentHealth = maxHealth;
+        //healthBar.SetMaxHealth(maxHealth);
+        currentDefenseShield = maxDefenseShield;
+        currentEnergy = maxEnergy;
+
         //seleção da layer do adiversário com base na do player (layer de aplicação do dano)
         if (PhotonNetwork.PlayerList[0] == PhotonNetwork.LocalPlayer)
         {
@@ -96,6 +102,11 @@ public class CharacterSet : MonoBehaviourPun
                 gameObject.layer = 6;
                 oponentLayer = LayerMask.GetMask("PlayerTwo");
                 gameObject.tag = "Player";
+
+                healthBar = GameManager.instance.healthBarOne;
+                energyBar = GameManager.instance.energyBarOne;
+                healthBar.SetMaxValue(maxHealth);
+                energyBar.SetMaxValue(maxEnergy);
             }
             else
             {
@@ -112,6 +123,11 @@ public class CharacterSet : MonoBehaviourPun
                 gameObject.layer = 7;
                 oponentLayer = LayerMask.GetMask("PlayerOne");
                 gameObject.tag = "PlayerTwo";
+
+                healthBar = GameManager.instance.healthBarTwo;
+                energyBar = GameManager.instance.energyBarTwo;
+                healthBar.SetMaxValue(maxHealth);
+                energyBar.SetMaxValue(maxEnergy);
             }
             else
             {
@@ -121,11 +137,6 @@ public class CharacterSet : MonoBehaviourPun
             }
             
         }
-
-        currentHealth = maxHealth;
-        //healthBar.SetMaxHealth(maxHealth);
-        currentDefenseShield = maxDefenseShield;
-        currentEnergy = maxEnergy;
     }
 
     protected virtual void Update()
@@ -160,24 +171,29 @@ public class CharacterSet : MonoBehaviourPun
                 if (_midAttack || _crouchAttack == isCrouched)
                 {
                     currentHealth = Mathf.Max(currentHealth - _damage * defenseDecrement, 0);
-                    currentEnergy += .1f;
+                    currentEnergy = Mathf.Clamp(currentHealth + .1f, 0, maxEnergy);
                     defendDamage = true;
                 }
                 else
                 {
                     currentHealth = Mathf.Max(currentHealth - _damage, 0);
-                    currentEnergy += .2f;
+                    currentEnergy = Mathf.Clamp(currentHealth + .2f, 0, maxEnergy);
                     defendDamage = false;
                 }
             }
             else
             {
                 currentHealth = Mathf.Max(currentHealth - _damage, 0);
-                currentEnergy += .2f;
+                currentEnergy = Mathf.Clamp(currentHealth + .2f, 0, maxEnergy);
                 defendDamage = false;
             }
             Debug.Log(currentHealth);
             //healthBar.SetHealth(currentHealth);
+            if (photonView.IsMine) 
+            { 
+                healthBar.UpdateValue(currentHealth);
+                energyBar.UpdateValue(currentEnergy);
+            }
 
             //evento p�s mitiga��o de dano
             if (currentHealth == 0) Death();
@@ -234,7 +250,7 @@ public class CharacterSet : MonoBehaviourPun
         if (canAttack && currentEnergy >= energyCost[(int)specialAttacks] && OnGround())
         {
             currentAttackPoint = attackPoints[0];
-            currentEnergy -= energyCost[(int)specialAttacks];
+            currentEnergy -= energyCost[(int)specialAttacks];//Mathf.Max(currentHealth - energyCost[(int)specialAttacks], 0);
             anim.SetInteger("AttackType", (int)specialAttacks);
             gatlingCombo = 1;
             currentKnockupValue = specialKnockupValues[(int)specialAttacks];
@@ -243,6 +259,7 @@ public class CharacterSet : MonoBehaviourPun
             currentAttackRange = attackRanges[(int)specialAttacks];
             canAttack = false;
             canMove = false;
+            energyBar.UpdateValue(currentEnergy);
             photonView.RPC(nameof(CallTrigger), RpcTarget.All, "SpecialAttack");
             //anim.SetTrigger("SpecialAttack");
         }
@@ -297,7 +314,6 @@ public class CharacterSet : MonoBehaviourPun
     }
     #endregion
 
-
     //M�todos chamados nas anima��es para causar dano ou resetar ataques
     #region On Animation Methods
 
@@ -313,7 +329,8 @@ public class CharacterSet : MonoBehaviourPun
             enemy.GetComponent<CharacterSet>().TakeDamage(currentDamage, currentKnockbackValue, currentKnockupValue, true, isCrouched, false); 
             if(enemy.GetComponent<CharacterSet>().isDefending == false)
             {
-                currentEnergy += .4f;
+                currentEnergy = Mathf.Clamp(currentHealth + .4f, 0, maxEnergy);
+                energyBar.UpdateValue(currentEnergy);
                 GatlingActivate();
             }
         }

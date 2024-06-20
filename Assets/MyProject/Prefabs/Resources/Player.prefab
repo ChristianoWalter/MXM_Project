@@ -428,6 +428,7 @@ MonoBehaviour:
   isInvencible: 0
   maxHealth: 20
   healthBar: {fileID: 1748916828661574061, guid: 36fa2c970305d984097e646760c6185c, type: 3}
+  energyBar: {fileID: 0}
   currentHealth: 0
   canMove: 1
   isCrouched: 0

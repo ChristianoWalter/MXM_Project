@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,12 +5,9 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 
-public class HealthBar : MonoBehaviourPunCallbacks
+public class EnergyBar : MonoBehaviourPunCallbacks
 {
-
     public Slider slider;
-    public Gradient gradient;
-    public Image fill;
 
     public void SetMaxValue(float value)
     {
@@ -24,19 +20,15 @@ public class HealthBar : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    void SetMaxHealth(float health)
+    void SetMaxHealth(float energy)
     {
-        slider.maxValue = health;
-        slider.value = health;
-
-       fill.color = gradient.Evaluate(1f);
+        slider.maxValue = energy;
+        slider.value = energy;
     }
 
     [PunRPC]
-    void SetHealth(float health)
+    void SetHealth(float energy)
     {
-        slider.value = health;
-
-        fill.color = gradient.Evaluate(slider.normalizedValue);
+        slider.value = energy;
     }
 }

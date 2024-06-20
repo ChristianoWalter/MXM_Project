@@ -14,6 +14,10 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] public GameObject playerPrefab;
     [SerializeField] public GameObject playerOnePrefab;
     [SerializeField] public GameObject playerTwoPrefab;
+    public HealthBar healthBarOne;
+    public HealthBar healthBarTwo;
+    public EnergyBar energyBarOne;
+    public EnergyBar energyBarTwo;
 
     bool youLose;
     public List<PlayerController> playersInGame = new List<PlayerController>();
@@ -29,6 +33,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         /*NetworkManager.instance.LoadScreen(5);
         StartGame();*/
     }
+
+
 
     public void StartGame()
     {
