@@ -66,6 +66,10 @@ MonoBehaviour:
   - SetHealthBarRpc
   - SetHealth
   - SetMaxHealth
+  - SetPlayerOne
+  - SetPlayerTwo
+  - CallSpecial
+  - CallAttack
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

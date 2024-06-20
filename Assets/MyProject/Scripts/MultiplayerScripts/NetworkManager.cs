@@ -5,7 +5,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.SceneManagement;
+using System.Linq;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
@@ -83,12 +83,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void SelectCharacter(GameObject _character)
     {
+        if (currentCharacter == null) readyBtn.interactable = true;
         currentCharacter = _character;
-        readyBtn.interactable = true;
     }
 
     public void Ready()
     {
+        buttons.All(button => button.interactable = false);
         readyBtn.interactable = false;
         photonView.RPC(nameof(ReadyRpc), RpcTarget.MasterClient);
     }
@@ -105,21 +106,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             playerIsReady = true;
         }
     }
-
+    
     public void SelectLevel(GameObject _level)
     {
+        if (currentLevel == null) startMatchBtn.interactable = true;
         currentLevel = _level;
-        PhotonNetwork.Instantiate(currentLevel.name, Vector2.zero, Quaternion.identity);
-        //photonView.RPC(nameof(SelectLvlRpc), RpcTarget.AllBuffered);
-        startMatchBtn.interactable = true;
     }
-
-    [PunRPC]
-    void SelectLvlRpc()
-    {
-        PhotonNetwork.Instantiate(currentLevel.name, Vector2.zero, Quaternion.identity);
-    }
-
     public void StartMatch()
     {
         GameManager.instance.StartGame();
@@ -155,16 +147,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         startMatchBtn.interactable = false;
     }
 
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        base.OnPlayerLeftRoom(otherPlayer);
+    }
     #endregion
     
-
-
-    [PunRPC]
-    void ActivateBtn()
-    {
-        startMatchBtn.interactable = true;
-    }
-
     //método para seleção e fluxo de telas
     public void LoadScreen(int screenIndex)
     {
@@ -215,10 +203,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
     }
 
-    [PunRPC]
-    public void LoadLevel()
+    public void QuitGame()
     {
-        LoadScreen(2);
-        SceneManager.LoadScene(sceneName);
+        Application.Quit();
     }
 }

@@ -222,7 +222,7 @@ MonoBehaviour:
     SynchronizeType: 2
     Name: Crouched
   - Type: 3
-    SynchronizeType: 2
+    SynchronizeType: 0
     Name: AttackType
   - Type: 9
     SynchronizeType: 0
@@ -499,7 +499,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   anim: {fileID: 6228595006041228738}
-  isInMatch: 1
+  isInMatch: 0
 --- !u!114 &6934974526602391916
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -696,7 +696,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
+  m_SynchronizeScale: 1
   m_UseLocal: 1
 --- !u!1 &7731044872055965467
 GameObject:

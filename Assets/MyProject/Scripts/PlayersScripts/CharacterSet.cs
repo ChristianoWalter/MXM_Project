@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using System.Globalization;
 
 public class CharacterSet : MonoBehaviourPun
 {
@@ -93,49 +94,63 @@ public class CharacterSet : MonoBehaviourPun
         currentDefenseShield = maxDefenseShield;
         currentEnergy = maxEnergy;
 
-        //seleção da layer do adiversário com base na do player (layer de aplicação do dano)
+        StartCoroutine(SetPlayerStatus());
+    }
+
+    private IEnumerator SetPlayerStatus()
+    {
+            //seleção da layer do adiversário com base na do player (layer de aplicação do dano)
         if (PhotonNetwork.PlayerList[0] == PhotonNetwork.LocalPlayer)
         {
+            yield return new WaitUntil(() => GameManager.instance.playerTwoPrefab != null);
+            /*while (GameManager.instance.playerTwoPrefab == null)
+            {
+                yield return null;
+            }*/
             if (photonView.IsMine)
             {
-                //oponentDirection = GameManager.instance.playerTwoPrefab.transform;
-                gameObject.layer = 6;
-                oponentLayer = LayerMask.GetMask("PlayerTwo");
-                gameObject.tag = "Player";
+                    oponentDirection = GameManager.instance.playerTwoPrefab.transform;
+                    gameObject.layer = 6;
+                    oponentLayer = LayerMask.GetMask("PlayerTwo");
+                    gameObject.tag = "Player";
 
-                healthBar = GameManager.instance.healthBarOne;
-                energyBar = GameManager.instance.energyBarOne;
-                healthBar.SetMaxValue(maxHealth);
-                energyBar.SetMaxValue(maxEnergy);
+                    healthBar = GameManager.instance.healthBarOne;
+                    energyBar = GameManager.instance.energyBarOne;
+                    healthBar.SetMaxValue(maxHealth);
+                    energyBar.SetMaxValue(maxEnergy);
             }
             else
             {
-                gameObject.layer = 7;
-                oponentLayer = LayerMask.GetMask("PlayerOne");
-                gameObject.tag = "PlayerTwo";
+                    gameObject.layer = 7;
+                    oponentLayer = LayerMask.GetMask("PlayerOne");
+                    gameObject.tag = "PlayerTwo";
             }
         }
         else
         {
+            yield return new WaitUntil(() => GameManager.instance.playerOnePrefab != null);
+            /*while (GameManager.instance.playerOnePrefab == null)
+            {
+                yield return null;
+            }*/
             if (photonView.IsMine)
             {
-                //oponentDirection = GameManager.instance.playerOnePrefab.transform;
-                gameObject.layer = 7;
-                oponentLayer = LayerMask.GetMask("PlayerOne");
-                gameObject.tag = "PlayerTwo";
+                    oponentDirection = GameManager.instance.playerOnePrefab.transform;
+                    gameObject.layer = 7;
+                    oponentLayer = LayerMask.GetMask("PlayerOne");
+                    gameObject.tag = "PlayerTwo";
 
-                healthBar = GameManager.instance.healthBarTwo;
-                energyBar = GameManager.instance.energyBarTwo;
-                healthBar.SetMaxValue(maxHealth);
-                energyBar.SetMaxValue(maxEnergy);
+                    healthBar = GameManager.instance.healthBarTwo;
+                    energyBar = GameManager.instance.energyBarTwo;
+                    healthBar.SetMaxValue(maxHealth);
+                    energyBar.SetMaxValue(maxEnergy);
             }
             else
             {
-                gameObject.layer = 6;
-                oponentLayer = LayerMask.GetMask("PlayerTwo");
-                gameObject.tag = "Player";
+                    gameObject.layer = 6;
+                    oponentLayer = LayerMask.GetMask("PlayerTwo");
+                    gameObject.tag = "Player";
             }
-            
         }
     }
 
@@ -226,18 +241,19 @@ public class CharacterSet : MonoBehaviourPun
         if (OnGround()) canMove = false;
         //else gatlingCombo = 1;
 
-        anim.SetInteger("AttackType", (int)currentAttackType);
+        //anim.SetInteger("AttackType", (int)currentAttackType);
         currentDamage = damages[(int)currentAttackType];
         currentAttackRange = attackRanges[(int)currentAttackType];
-        currentKnockbackValue = knockbackValues[(int)specialAttacks];
-        currentKnockupValue = knockupValues[(int)specialAttacks];
+        currentKnockbackValue = knockbackValues[(int)currentAttackType];
+        currentKnockupValue = knockupValues[(int)currentAttackType];
 
         if (!isCrouched) currentAttackPoint = attackPoints[0];
         else currentAttackPoint = attackPoints[1];
 
         canAttack = false;
         //anim.SetTrigger("Attack"); 
-        photonView.RPC(nameof(CallTrigger), RpcTarget.All, "Attack");
+        //photonView.RPC(nameof(CallTrigger), RpcTarget.All, "Attack");
+        photonView.RPC(nameof(CallAttack), RpcTarget.All, (int)currentAttackType, "Attack");
         gatlingCombo++;
 
         yield return new WaitForSeconds(.1f);
@@ -251,7 +267,6 @@ public class CharacterSet : MonoBehaviourPun
         {
             currentAttackPoint = attackPoints[0];
             currentEnergy = Mathf.Max(currentEnergy - energyCost[(int)specialAttacks], 0);
-            anim.SetInteger("AttackType", (int)specialAttacks);
             gatlingCombo = 1;
             currentKnockupValue = specialKnockupValues[(int)specialAttacks];
             currentKnockbackValue = specialKnockbackValues[(int)specialAttacks];
@@ -260,7 +275,9 @@ public class CharacterSet : MonoBehaviourPun
             canAttack = false;
             canMove = false;
             energyBar.UpdateValue(currentEnergy);
-            photonView.RPC(nameof(CallTrigger), RpcTarget.All, "SpecialAttack");
+            //anim.SetInteger("AttackType", (int)specialAttacks);
+            //photonView.RPC(nameof(CallTrigger), RpcTarget.All, "SpecialAttack");
+            photonView.RPC(nameof(CallAttack), RpcTarget.All, (int)specialAttacks, "SpecialAttack");
             //anim.SetTrigger("SpecialAttack");
         }
     }
@@ -386,6 +403,17 @@ public class CharacterSet : MonoBehaviourPun
     {
         anim.SetTrigger(_triggerName);
         Debug.Log(_triggerName);
+        Debug.Log(anim.GetInteger("AttackType"));
+    }
+    
+    //método RPC para chamar o especial
+    [PunRPC]
+    protected void CallAttack(int attackType, string trigger)
+    {
+        anim.SetInteger("AttackType", attackType);
+        anim.SetTrigger(trigger);
+        
+        Debug.Log($"ataque é {anim.GetInteger("AttackType")}");
     }
 
     //m�todo para anima��es
