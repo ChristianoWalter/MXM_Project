@@ -21,9 +21,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [SerializeField] Button[] buttons;
     public GameObject currentCharacter;
     public GameObject currentLevel;
-    int playersReady;
     private bool playerIsReady;
-    private bool playerTwoIsReady;
+    private bool characterSelected;
 
     [Header("Telas de menu")]
     [SerializeField] GameObject mainMenuScreen;
@@ -83,7 +82,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void SelectCharacter(GameObject _character)
     {
-        if (currentCharacter == null) readyBtn.interactable = true;
+        if (!characterSelected) readyBtn.interactable = true;
+        characterSelected = true;
         currentCharacter = _character;
     }
 
@@ -91,7 +91,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         buttons.All(button => button.interactable = false);
         readyBtn.interactable = false;
-        photonView.RPC(nameof(ReadyRpc), RpcTarget.MasterClient);
+        photonView.RPC(nameof(ReadyRpc), RpcTarget.AllBuffered);
     }
 
     [PunRPC]
@@ -99,12 +99,20 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         if (playerIsReady)
         {
-            LoadScreen(6);
+            if (PhotonNetwork.PlayerList[0] == PhotonNetwork.LocalPlayer) LoadScreen(6);
+            playerIsReady = false;
         }
         else
         {
             playerIsReady = true;
         }
+    }
+
+    [PunRPC]
+    void ReactiveBtn()
+    {
+        buttons.All(button => button.interactable = true);
+        characterSelected = false;
     }
     
     public void SelectLevel(GameObject _level)
@@ -114,6 +122,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
     public void StartMatch()
     {
+        photonView.RPC(nameof(ReactiveBtn), RpcTarget.AllBuffered);
         GameManager.instance.StartGame();
     }
     #endregion
@@ -150,6 +159,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         base.OnPlayerLeftRoom(otherPlayer);
+        if (otherPlayer != PhotonNetwork.LocalPlayer)
+        {
+            PhotonNetwork.LeaveRoom();
+        }
+        LoadScreen(1);
     }
     #endregion
     
@@ -201,6 +215,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 defeatScreen.SetActive(true);
                 break;
         }
+    }
+
+    public void QuitRoom()
+    {
+        PhotonNetwork.LeaveRoom(this);
     }
 
     public void QuitGame()

@@ -90,7 +90,6 @@ public class CharacterSet : MonoBehaviourPun
     protected virtual void Awake()
     {
         currentHealth = maxHealth;
-        //healthBar.SetMaxHealth(maxHealth);
         currentDefenseShield = maxDefenseShield;
         currentEnergy = maxEnergy;
 
@@ -103,10 +102,6 @@ public class CharacterSet : MonoBehaviourPun
         if (PhotonNetwork.PlayerList[0] == PhotonNetwork.LocalPlayer)
         {
             yield return new WaitUntil(() => GameManager.instance.playerTwoPrefab != null);
-            /*while (GameManager.instance.playerTwoPrefab == null)
-            {
-                yield return null;
-            }*/
             if (photonView.IsMine)
             {
                     oponentDirection = GameManager.instance.playerTwoPrefab.transform;
@@ -121,6 +116,7 @@ public class CharacterSet : MonoBehaviourPun
             }
             else
             {
+                    oponentDirection = GameManager.instance.playerOnePrefab.transform;
                     gameObject.layer = 7;
                     oponentLayer = LayerMask.GetMask("PlayerOne");
                     gameObject.tag = "PlayerTwo";
@@ -129,10 +125,6 @@ public class CharacterSet : MonoBehaviourPun
         else
         {
             yield return new WaitUntil(() => GameManager.instance.playerOnePrefab != null);
-            /*while (GameManager.instance.playerOnePrefab == null)
-            {
-                yield return null;
-            }*/
             if (photonView.IsMine)
             {
                     oponentDirection = GameManager.instance.playerOnePrefab.transform;
@@ -147,6 +139,7 @@ public class CharacterSet : MonoBehaviourPun
             }
             else
             {
+                    oponentDirection = GameManager.instance.playerTwoPrefab.transform;
                     gameObject.layer = 6;
                     oponentLayer = LayerMask.GetMask("PlayerTwo");
                     gameObject.tag = "Player";
@@ -423,7 +416,8 @@ public class CharacterSet : MonoBehaviourPun
         anim.SetBool("OnGround", OnGround());
 
         //Mudan�a de dire��o do sprite do player
-        if ((oponentDirection.position.x > gameObject.transform.position.x && transform.localScale.x < 0) || (oponentDirection.position.x < gameObject.transform.position.x && transform.localScale.x > 0))
+        if ((oponentDirection.position.x > gameObject.transform.position.x && transform.localScale.x < 0) 
+            || (oponentDirection.position.x < gameObject.transform.position.x && transform.localScale.x > 0))
         {
             Vector2 _localScale = transform.localScale;
             _localScale.x *= -1f;

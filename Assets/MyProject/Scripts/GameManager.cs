@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public static GameManager instance;
 
     [Header("Objetos do Player")]
+    GameObject level;
     [SerializeField] public GameObject playerPrefab;
     [SerializeField] public GameObject playerOnePrefab;
     [SerializeField] public GameObject playerTwoPrefab;
@@ -26,14 +27,21 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] TextMeshProUGUI timeToStartTxt;
     [SerializeField] float timeToEnd;
     [SerializeField] float timeToStart = 3;
+    bool playAgain;
     bool gameStarted;
     bool gameFinished;
     bool youLose;
 
     private void Awake()
     {
-        instance = this;
-        //gameScreen.SetActive(false);
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void Update()
@@ -81,11 +89,39 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
+    public void PlayAgain()
+    {
+        photonView.RPC(nameof(PlayAgainRpc), RpcTarget.AllBuffered);
+    }
+
+    [PunRPC]
+    void PlayAgainRpc()
+    {
+        if (playAgain)
+        {
+            if (playerOnePrefab != null) Destroy(playerOnePrefab);
+
+            if (playerTwoPrefab != null) Destroy(playerTwoPrefab);
+
+            if (level != null) Destroy(level);
+
+            NetworkManager.instance.LoadScreen(3);
+            timeToStart = 3;
+            gameStarted = false;
+            gameFinished = false;
+            timeToStartTxt.gameObject.SetActive(true);
+            playAgain = false;
+            youLose = false;
+        }
+        else playAgain = true;
+    }
+
     public void StartGame()
     {
         if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
         {
-            PhotonNetwork.InstantiateRoomObject(NetworkManager.instance.currentLevel.name, Vector2.zero, Quaternion.identity);
+            photonView.RPC(nameof(LoadLevel), RpcTarget.AllBuffered);
+            level = PhotonNetwork.InstantiateRoomObject(NetworkManager.instance.currentLevel.name, Vector2.zero, Quaternion.identity);
             photonView.RPC(nameof(CreatePlayer), RpcTarget.AllBuffered);
         }
     }
@@ -131,13 +167,18 @@ public class GameManager : MonoBehaviourPunCallbacks
             playerTwoPrefab.GetComponent<PlayerController>().isInMatch = false;
         }
     }
+    
+    [PunRPC]
+    void LoadLevel()
+    {
+        NetworkManager.instance.LoadScreen(5);
+    }
 
     [PunRPC]
     void CreatePlayer()
-    {      
+    {
         gameStarted = true;
         playerPrefab = NetworkManager.instance.currentCharacter;
-        NetworkManager.instance.LoadScreen(5);
 
         if (PhotonNetwork.PlayerList[0] == PhotonNetwork.LocalPlayer)
         {
@@ -163,5 +204,13 @@ public class GameManager : MonoBehaviourPunCallbacks
     void SetPlayerTwo(int id)
     {
         playerTwoPrefab = PhotonView.Find(id).gameObject;
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        base.OnPlayerLeftRoom(otherPlayer);
+        if (playerOnePrefab != null) Destroy(playerOnePrefab);
+
+        if (playerTwoPrefab != null) Destroy(playerTwoPrefab);
     }
 }

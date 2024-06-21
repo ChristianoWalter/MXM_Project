@@ -25,10 +25,8 @@ public class PlayerController : CharacterSet
 
     protected override void Update()
     {
-        if (!isInMatch) return;
         base.Update();
-
-        if (!photonView.IsMine) return;
+        if (!photonView.IsMine || !isInMatch) return;
 
             //método de controle da velocidade e movimentaçãodo player
         if (canMove) rb.velocity = new Vector2(inputDirection.x * moveSpeed, rb.velocity.y);
@@ -53,7 +51,7 @@ public class PlayerController : CharacterSet
     //método de input para ataque leve
     public void QuickAttackAction(InputAction.CallbackContext value)
     {
-        if (!photonView.IsMine) return;
+        if (!photonView.IsMine || !isInMatch) return;
         if (value.performed)
         {
             currentAttackType = attackTypes.quickAttack;
@@ -64,7 +62,7 @@ public class PlayerController : CharacterSet
     //método de input para ataque médio
     public void MediumAttackAction(InputAction.CallbackContext value)
     {
-        if (!photonView.IsMine) return;
+        if (!photonView.IsMine || !isInMatch) return;
         if (value.performed)
         {
             currentAttackType = attackTypes.mediumAttack;
@@ -75,7 +73,7 @@ public class PlayerController : CharacterSet
     //método de input para ataque pesado
     public void HeavyAttackAction(InputAction.CallbackContext value)
     {
-        if (!photonView.IsMine) return;
+        if (!photonView.IsMine || !isInMatch) return;
         if (value.performed)
         {
             currentAttackType = attackTypes.heavyAttack;
@@ -86,7 +84,7 @@ public class PlayerController : CharacterSet
     //método para input de ataque especial
     public void SpecialAttackAction(InputAction.CallbackContext value)
     {
-        if (!photonView.IsMine) return;
+        if (!photonView.IsMine || !isInMatch) return;
         if (value.performed && OnGround() && !isCrouched)
         {
             SpecialAttack();
@@ -97,7 +95,7 @@ public class PlayerController : CharacterSet
         //método para input de defesa
     public void DefenseAction(InputAction.CallbackContext value)
     {
-        if (!photonView.IsMine) return;
+        if (!photonView.IsMine || !isInMatch) return;
         if (value.performed && !isOutStamina)
         {
             canMove = false;
@@ -113,7 +111,7 @@ public class PlayerController : CharacterSet
         //ação de agachar
     public void CrouchAction(InputAction.CallbackContext value)
     {
-        if (!photonView.IsMine) return;
+        if (!photonView.IsMine || !isInMatch) return;
 
         if (value.performed)
         {
@@ -125,7 +123,7 @@ public class PlayerController : CharacterSet
         //método para receber input e movimentar o Player
     public void MovementAction(InputAction.CallbackContext value)
     {
-        if (!photonView.IsMine) return;
+        if (!photonView.IsMine || !isInMatch) return;
 
         inputDirection = value.ReadValue<Vector2>();
 
@@ -145,8 +143,7 @@ public class PlayerController : CharacterSet
             //input out
         if (value.canceled)
         {
-            if(inputDirection.x == 0) specialAttacks = attackTypes.quickAttack;          
-            //if(inputDirection.y == 0 && isCrouched) Crouch(); canCrouch = true;     
+            if(inputDirection.x == 0) specialAttacks = attackTypes.quickAttack;        
             if(inputDirection.y == 0) canInputJump = true; 
         }
     }
