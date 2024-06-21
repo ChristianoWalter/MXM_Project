@@ -272,9 +272,9 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 1328351225083159657, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -0.3300016
+    - target: {fileID: 1649850293805575088, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
+      propertyPath: sceneViewId
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4690208988414661732, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
       propertyPath: sceneViewId

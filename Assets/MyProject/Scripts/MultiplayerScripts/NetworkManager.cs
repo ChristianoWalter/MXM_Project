@@ -92,6 +92,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         buttons.All(button => button.interactable = false);
         readyBtn.interactable = false;
         photonView.RPC(nameof(ReadyRpc), RpcTarget.AllBuffered);
+        ChatBox.instance.SendNotification("está pronto");
     }
 
     [PunRPC]
