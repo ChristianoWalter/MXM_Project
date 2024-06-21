@@ -46,15 +46,15 @@ public class CharacterSet : MonoBehaviourPun
     protected int gatlingCombo;
 
     [Header("Special Stats")]
-    [SerializeField] protected float[] specialKnockbackValues;
+    //Ap�s testado e aprovado remover o serializefield
+    [SerializeField] protected attackTypes specialAttacks;
     [SerializeField] protected float[] specialKnockupValues;
+    [SerializeField] protected float[] specialKnockbackValues;
     [SerializeField] protected float maxEnergy;
     //Ap�s testado e aprovado remover o serializefield
     [SerializeField] protected float currentEnergy;
     [SerializeField] protected float[] energyCost;
     [SerializeField] protected bool canUseSpecial;
-    //Ap�s testado e aprovado remover o serializefield
-    [SerializeField] protected attackTypes specialAttacks;
     [SerializeField] protected GameObject projectile;
 
     [Header("Defense")]

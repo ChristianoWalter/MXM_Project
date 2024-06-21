@@ -459,19 +459,20 @@ MonoBehaviour:
   currentAttackType: 0
   knockupValues:
   - 0
-  - 0
+  - 4
   - 0
   knockbackValues:
+  - 4
   - 0
-  - 0
-  - 0
-  specialKnockbackValues:
-  - 0
-  - 0
-  - 0
+  - 15
+  specialAttacks: 0
   specialKnockupValues:
   - 0
+  - 8
   - 0
+  specialKnockbackValues:
+  - 10
+  - 1
   - 0
   maxEnergy: 10
   currentEnergy: 0
@@ -480,7 +481,6 @@ MonoBehaviour:
   - 2
   - 3
   canUseSpecial: 1
-  specialAttacks: 0
   projectile: {fileID: 4905540677944089207, guid: 4ed927f58b133a14d9702d67767a2ba9, type: 3}
   isDefending: 0
   defenseDecrement: 0
