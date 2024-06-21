@@ -92,7 +92,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 85.65
+  m_fontSize: 85.55
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3498,7 +3498,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.0625, y: 0.2}
   m_AnchorMax: {x: 0.9312501, y: 0.8666667}
-  m_AnchoredPosition: {x: 0.19000244, y: -0.33000207}
+  m_AnchoredPosition: {x: 0.19000244, y: -0.33000183}
   m_SizeDelta: {x: -0.39000034, y: -0.63999987}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6627723024466878518
@@ -5757,6 +5757,8 @@ MonoBehaviour:
   timeToStartTxt: {fileID: 7706164119608121926}
   timeToEnd: 120
   timeToStart: 3
+  playAgainVicBtn: {fileID: 5011294008617256919}
+  playAgainDefBtn: {fileID: 5613164038787292029}
 --- !u!114 &4910049745005377546
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7881,6 +7883,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 5011294008617256919}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
+        m_MethodName: set_interactable
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7010724909662155902
 GameObject:
   m_ObjectHideFlags: 0
@@ -8887,6 +8901,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: PlayAgain
         m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 5613164038787292029}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
+        m_MethodName: set_interactable
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

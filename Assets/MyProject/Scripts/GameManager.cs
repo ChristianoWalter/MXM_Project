@@ -27,6 +27,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] TextMeshProUGUI timeToStartTxt;
     [SerializeField] float timeToEnd;
     [SerializeField] float timeToStart = 3;
+    [SerializeField] Button playAgainVicBtn;
+    [SerializeField] Button playAgainDefBtn;
     bool playAgain;
     bool gameStarted;
     bool gameFinished;
@@ -112,6 +114,8 @@ public class GameManager : MonoBehaviourPunCallbacks
             timeToStartTxt.gameObject.SetActive(true);
             playAgain = false;
             youLose = false;
+            playAgainVicBtn.interactable = true;
+            playAgainDefBtn.interactable = true;
         }
         else playAgain = true;
     }
