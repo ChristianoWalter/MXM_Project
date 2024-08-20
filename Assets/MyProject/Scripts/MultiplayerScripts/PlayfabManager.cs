@@ -5,23 +5,51 @@ using PlayFab;
 using PlayFab.ClientModels;
 using System;
 using UnityEditor.PackageManager.Requests;
+using UnityEngine.UI;
+using TMPro;
+using UnityEngine.Device;
 
 public class PlayfabManager : MonoBehaviour
 {
     public static PlayfabManager instance;
     public string PlayfabID;
 
+    [Header("Warning screen")]
+    [SerializeField] TextMeshProUGUI messageTxt;
+    public GameObject warningScreen;
+
+    [Header("Login Screens")]
+    public GameObject loginScreen;
+    public GameObject createAccountScreen;
+    public GameObject anonimousLoginScreen;
+
+    [Header("Login Information")]
+    string username;
+    [SerializeField] TMP_InputField usernameEmailLoginInput;
+    [SerializeField] TMP_InputField passwordLoginInput;
+    [SerializeField] Button stillLogedBtn;
+
+    [Header("Create Account Information")]
+    [SerializeField] TMP_InputField usernameInput;
+    [SerializeField] TMP_InputField passwordInput;
+    [SerializeField] TMP_InputField confirmPasswordInput;
+    [SerializeField] TMP_InputField emailInput;
+    
+    [Header("Anonimous Login Information")]
+    [SerializeField] TMP_InputField anonimousUsernameInput;
+
     Dictionary<string, string> playerData = new Dictionary<string, string>();
 
     private void Awake()
     {
         instance = this;
+        ShowScreens(1);
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        Login();
+        //Login();
     }
 
     // Update is called once per frame
@@ -30,7 +58,7 @@ public class PlayfabManager : MonoBehaviour
 
     }
 
-    void SetUserData()
+    /*void SetUserData()
     {
         PlayFabClientAPI.UpdateUserData(new UpdateUserDataRequest()
         {
@@ -38,7 +66,7 @@ public class PlayfabManager : MonoBehaviour
             {
                 {"XP", "500"},
                 {"Level", "2" }
-        }
+            }
         },
             result =>
             {
@@ -94,45 +122,9 @@ public class PlayfabManager : MonoBehaviour
         );
     }
 
-    void SetUserDataWithJson(string _id, string _data)
-    {
-        PlayFabClientAPI.UpdateUserData(new UpdateUserDataRequest()
-        {
-            Data = new Dictionary<string, string>() {
-            {
-                _id, _data
-            }}
-        },
-        result => Debug.Log("Dados Atualizados com sucesso!"),
-        error => { Debug.Log("Error" + error.ErrorMessage); });
-    }
-
-    void GetUserDataWithJson(string myPlayfabID, string _id)
-    {
-        PlayFabClientAPI.GetUserData(new GetUserDataRequest()
-        {
-            PlayFabId = myPlayfabID,
-            Keys = null
-        },
-        result =>
-        {
-            if (result == null || !result.Data.ContainsKey(_id))
-            {
-                Debug.Log("Dados não encontrados");
-            }
-            else
-            {
-                PlayerInfo _playerInfo = JsonUtility.FromJson<PlayerInfo>(result.Data[_id].Value);
-                Debug.Log(_playerInfo.nickName);
-                Debug.Log(_playerInfo.level);
-                Debug.Log(_playerInfo.currentXP);
-            }
-        },
-        error => { Debug.Log("Error" + error.ErrorMessage); });
-    }
 
     #region Login
-    void Login()
+    void LoginWithCustomID()
     {
         var requestLogin = new LoginWithCustomIDRequest
         {
@@ -222,9 +214,11 @@ public class PlayfabManager : MonoBehaviour
     private void GetAllPlayerDataFail(PlayFabError error)
     {
 
-    }
+    }*/
 
-    void CreateAccount (string username, string email, string password)
+
+    #region Create account/login in playfab game
+    public void CreateAccount(string username, string email, string password)
     {
         var registerRequest = new RegisterPlayFabUserRequest()
         {
@@ -232,28 +226,160 @@ public class PlayfabManager : MonoBehaviour
             Email = email,
             Password = password
         };
-        //PlayFabClientAPI.RegisterPlayFabUser ()
+        PlayFabClientAPI.RegisterPlayFabUser(registerRequest,
+            result =>
+            {
+                ShowMessage("Conta criada com sucesso");
+                ShowScreens(1);
+                NetworkManager.instance.LoadScreen(9);
+            },
+            error =>
+            {
+                ShowMessage(error.ErrorMessage);
+                ShowScreens(2);
+                NetworkManager.instance.LoadScreen(9);
+                ShowMessage(error.ErrorMessage);
+            }
+            );
     }
 
-    public void AddUsernamepassword()
+    public void UserLogin(string _username, string _password)
     {
-        var _request = new AddUsernamePasswordRequest()
+        var _request = new LoginWithPlayFabRequest()
         {
-            Username = "",
-            Password = "",
-            Email = ""
+            Username = _username,
+            Password = _password
         };
-        PlayFabClientAPI.AddUsernamePassword(_request, AddUsernamePasswordSucces, AddUsernamePasswordFailed);
+        PlayFabClientAPI.LoginWithPlayFab(_request, UserLoginSucces, 
+            error =>
+        {
+            var _requestEmail = new LoginWithEmailAddressRequest()
+            {
+                Email = _username,
+                Password = _password
+            };
+            PlayFabClientAPI.LoginWithEmailAddress(_requestEmail, UserLoginSucces, UserLoginFailed);
+        }
+        );
     }
 
-    private void AddUsernamePasswordSucces(AddUsernamePasswordResult result)
+    private void UserLoginSucces(LoginResult result)
     {
-        Debug.Log(result.Username);
+        NetworkManager.instance.LoadScreen(2);
+        NetworkManager.instance.PhotonLogin(usernameEmailLoginInput.text);
     }
 
-    private void AddUsernamePasswordFailed(PlayFabError error)
+    private void UserLoginFailed(PlayFabError error)
     {
-        Debug.Log(error.ErrorMessage);
+        NetworkManager.instance.LoadScreen(9);
     }
+
+    public void BtnLogin()
+    {
+        NetworkManager.instance.LoadScreen(2);
+
+        string _usernameOrEmail = usernameEmailLoginInput.text;
+        string _password = passwordLoginInput.text;
+
+        if (string.IsNullOrEmpty(_usernameOrEmail) || string.IsNullOrEmpty(_password))
+        {
+            ShowMessage("Preencha todos os campos");
+            NetworkManager.instance.LoadScreen(9);
+        }
+        else if (_usernameOrEmail.Length < 3)
+        {
+            ShowMessage("Dados do usuário inválidos");
+            NetworkManager.instance.LoadScreen(9);
+        }
+        else
+        {
+            UserLogin(_usernameOrEmail, _password);
+        }
+    }
+
+    public void BtnCreateAccount()
+    {
+        NetworkManager.instance.LoadScreen(2);
+
+        string _username = usernameInput.text;
+        string _email = emailInput.text;
+        string _password = passwordInput.text;
+        string _confirmPassword = confirmPasswordInput.text;
+
+        if (string.IsNullOrEmpty(_username) ||
+            string.IsNullOrEmpty(_email) ||
+            string.IsNullOrEmpty(_password) ||
+            string.IsNullOrEmpty(_confirmPassword))
+        {
+            Debug.Log("Favor preencher todos os campos");
+            ShowMessage("Favor preencher todos os campos");
+            NetworkManager.instance.LoadScreen(9);
+        }
+        else if (_username.Length < 3)
+        {
+            Debug.Log("Username precisa ter ao menos 3 caracteres");
+            ShowMessage("Username precisa ter ao menos 3 caracteres");
+            NetworkManager.instance.LoadScreen(9);
+        }
+        else if (_password.Length < 6)
+        {
+            ShowMessage("Senha precisa ter ao menos 6 caracteres");
+            NetworkManager.instance.LoadScreen(9);
+        }
+        else if (_password != _confirmPassword)
+        {
+            Debug.Log("A senha não confere!");
+            ShowMessage("A senha não confere!");
+            NetworkManager.instance.LoadScreen(9);
+        }
+        else
+        {
+            CreateAccount(_username, _email, _password);
+        }
+
+    }
+
+    public void BtnAnonimousLogin()
+    {
+        NetworkManager.instance.LoadScreen(2);
+        NetworkManager.instance.PhotonLogin(anonimousUsernameInput.text);
+    }
+
+    public void BtnStayLoged()
+    {
+        if (stillLogedBtn)
+        {
+
+        }
+    }
+    #endregion
+
+    #region Screens controller
+    public void ShowScreens(int screens)
+    {
+        loginScreen.SetActive(false);
+        createAccountScreen.SetActive(false);
+        anonimousLoginScreen.SetActive(false);
+
+        switch (screens)
+        {
+            case 1:
+                loginScreen.SetActive(true);
+                break;
+            case 2: 
+                createAccountScreen.SetActive(true);
+                break;
+            case 3:
+                anonimousLoginScreen.SetActive(true);
+                break;
+        }
+    }
+
+    public void ShowMessage(string message)
+    {
+        warningScreen.SetActive(true);
+        messageTxt.text = message;
+    }
+    #endregion
 }
 

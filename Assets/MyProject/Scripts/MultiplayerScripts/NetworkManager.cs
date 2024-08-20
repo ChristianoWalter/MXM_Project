@@ -35,6 +35,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [SerializeField] GameObject defeatScreen;
     [SerializeField] GameObject playerSelectionScreen;
     [SerializeField] GameObject mapSelectionScreen;
+    [SerializeField] GameObject loginScreen;
 
     [Header("Inputs para inserção de texto")]
     [SerializeField] TMP_InputField nicknameInput;
@@ -72,9 +73,16 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     //método para atrelar ao botão e se conectar ao server
     public void PlayGame()
     {
+        PhotonNetwork.JoinLobby();
         LoadScreen(2);
+        //PhotonNetwork.ConnectUsingSettings();
+        //PhotonNetwork.LocalPlayer.NickName = nicknameInput.text;
+    }
+
+    public void PhotonLogin(string username)
+    {
         PhotonNetwork.ConnectUsingSettings();
-        PhotonNetwork.LocalPlayer.NickName = nicknameInput.text;
+        PhotonNetwork.LocalPlayer.NickName = username;
     }
     
     //região destinada a métodos de seleção de personagens e mapas
@@ -133,7 +141,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         Debug.Log("On Connected To Master");
-        PhotonNetwork.JoinLobby();
+        LoadScreen(0);
+        //PhotonNetwork.JoinLobby();
     }
 
     public override void OnJoinedLobby()
@@ -181,6 +190,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         defeatScreen.SetActive(false);
         playerSelectionScreen.SetActive(false);
         mapSelectionScreen.SetActive(false);
+        loginScreen.SetActive(false);
 
         switch (screenIndex)
         {
@@ -214,6 +224,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             case 8:
                 playerUiScreen.SetActive(true);
                 defeatScreen.SetActive(true);
+                break;
+            case 9:
+                loginScreen.SetActive(true);
                 break;
         }
     }
