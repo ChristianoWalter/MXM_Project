@@ -22,9 +22,9 @@ public class PlayfabManager : MonoBehaviour
     public GameObject loginScreen;
     public GameObject createAccountScreen;
     public GameObject anonimousLoginScreen;
+    public GameObject recoverAccountScreen;
 
     [Header("Login Information")]
-    string username;
     [SerializeField] TMP_InputField usernameEmailLoginInput;
     [SerializeField] TMP_InputField passwordLoginInput;
     [SerializeField] Button stillLogedBtn;
@@ -37,6 +37,9 @@ public class PlayfabManager : MonoBehaviour
     
     [Header("Anonimous Login Information")]
     [SerializeField] TMP_InputField anonimousUsernameInput;
+    
+    [Header("Recover Account Information")]
+    [SerializeField] TMP_InputField recoverEmailInput;
 
     Dictionary<string, string> playerData = new Dictionary<string, string>();
 
@@ -250,20 +253,20 @@ public class PlayfabManager : MonoBehaviour
             Username = _username,
             Password = _password
         };
-        PlayFabClientAPI.LoginWithPlayFab(_request, UserLoginSucces, 
-            error =>
+        PlayFabClientAPI.LoginWithPlayFab(_request, UserLoginSuccess, 
+             error =>
         {
             var _requestEmail = new LoginWithEmailAddressRequest()
             {
                 Email = _username,
                 Password = _password
             };
-            PlayFabClientAPI.LoginWithEmailAddress(_requestEmail, UserLoginSucces, UserLoginFailed);
+            PlayFabClientAPI.LoginWithEmailAddress(_requestEmail, UserLoginSuccess, UserLoginFailed);
         }
         );
     }
 
-    private void UserLoginSucces(LoginResult result)
+    private void UserLoginSuccess(LoginResult result)
     {
         NetworkManager.instance.LoadScreen(2);
         NetworkManager.instance.PhotonLogin(usernameEmailLoginInput.text);
@@ -272,6 +275,7 @@ public class PlayfabManager : MonoBehaviour
     private void UserLoginFailed(PlayFabError error)
     {
         NetworkManager.instance.LoadScreen(9);
+        ShowMessage("Falha ao efetuar login: " + $"Error {error.ErrorMessage}");
     }
 
     public void BtnLogin()
@@ -354,12 +358,61 @@ public class PlayfabManager : MonoBehaviour
     }
     #endregion
 
+    #region Account Manager
+    public void BtnRecoverAccount()
+    {
+        var _request = new SendAccountRecoveryEmailRequest()
+        {
+            Email = recoverEmailInput.text,
+            TitleId = PlayFabSettings.TitleId
+        };
+        PlayFabClientAPI.SendAccountRecoveryEmail(_request, RecoverAccountSuccess, RecoverAccountFailed);
+        NetworkManager.instance.LoadScreen(2);
+    }
+
+    private void RecoverAccountSuccess(SendAccountRecoveryEmailResult result)
+    {
+        ShowMessage("Solicitação enviada ao email com sucesso!");
+        ShowScreens(1);
+        NetworkManager.instance.LoadScreen(9);
+    }
+
+    private void RecoverAccountFailed(PlayFabError error)
+    {
+        ShowMessage(error.ErrorMessage);
+        NetworkManager.instance.LoadScreen(9);
+    }
+
+    public void DeleteAccount()
+    {
+        ExecuteCloudScriptRequest request = new ExecuteCloudScriptRequest()
+        {
+            FunctionName = "deletePlayerAccount",
+            GeneratePlayStreamEvent = true
+        };
+        PlayFabClientAPI.ExecuteCloudScript(request, DeleteAccountSuccess, DeleteAccountFailed);
+    }
+
+    private void DeleteAccountSuccess(ExecuteCloudScriptResult result)
+    {
+        ShowScreens(1);
+        NetworkManager.instance.LoadScreen(9);
+        ShowMessage("Conta deletada com sucesso");
+    }
+
+    private void DeleteAccountFailed(PlayFabError error)
+    {
+        ShowMessage($"Error {error.ErrorMessage}");
+    }
+    #endregion
+
     #region Screens controller
     public void ShowScreens(int screens)
     {
         loginScreen.SetActive(false);
         createAccountScreen.SetActive(false);
         anonimousLoginScreen.SetActive(false);
+        recoverAccountScreen.SetActive(false);
 
         switch (screens)
         {
@@ -371,6 +424,9 @@ public class PlayfabManager : MonoBehaviour
                 break;
             case 3:
                 anonimousLoginScreen.SetActive(true);
+                break;
+            case 4:
+                recoverAccountScreen.SetActive(true);
                 break;
         }
     }

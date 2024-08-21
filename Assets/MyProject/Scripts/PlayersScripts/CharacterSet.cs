@@ -167,7 +167,7 @@ public class CharacterSet : MonoBehaviourPun
 
     //método para validação de dano, via RPC para ambos os jogadores
     [PunRPC]
-    protected void DamageRPC(float _damage, float _knockback, float _knockup, bool _canDefend, bool _crouchAttack, bool _midAttack)
+    public void DamageRPC(float _damage, float _knockback, float _knockup, bool _canDefend, bool _crouchAttack, bool _midAttack)
     {
         if (!isInvencible)
         {
@@ -336,7 +336,7 @@ public class CharacterSet : MonoBehaviourPun
 
         foreach (Collider2D enemy in hitEnemies)
         {
-            enemy.GetComponent<CharacterSet>().TakeDamage(currentDamage, currentKnockbackValue, currentKnockupValue, true, isCrouched, false); 
+            enemy.GetComponent<CharacterSet>().photonView.RPC(nameof(DamageRPC), RpcTarget.All, currentDamage, currentKnockbackValue, currentKnockupValue, true, isCrouched, false); 
             if(enemy.GetComponent<CharacterSet>().isDefending == false)
             {
                 currentEnergy = Mathf.Clamp(currentEnergy + .4f, 0, maxEnergy);

@@ -47,7 +47,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         if (instance == null)
         {
             instance = this;
-            LoadScreen(0);
+            LoadScreen(9);
             DontDestroyOnLoad(gameObject);
         }
         else
