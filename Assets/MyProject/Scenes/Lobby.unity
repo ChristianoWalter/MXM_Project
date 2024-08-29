@@ -294,15 +294,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 864278320029779296, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
       propertyPath: sceneViewId
-      value: 3
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1206597648809274159, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1649850293805575088, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
       propertyPath: sceneViewId
-      value: 5
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2925879783014781468, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3007059369874839663, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: -1010.2249
       objectReference: {fileID: 0}
     - target: {fileID: 4690208988414661732, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
       propertyPath: sceneViewId
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4893414516489943349, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
       propertyPath: m_Name
@@ -314,11 +326,11 @@ PrefabInstance:
       objectReference: {fileID: 644507434}
     - target: {fileID: 5671707146354964028, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
       propertyPath: sceneViewId
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6266221403495795216, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
       propertyPath: sceneViewId
-      value: 6
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6674772443756674962, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -362,7 +374,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7648831154954111713, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
       propertyPath: sceneViewId
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8190003092044475892, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
       propertyPath: m_AnchorMax.y
