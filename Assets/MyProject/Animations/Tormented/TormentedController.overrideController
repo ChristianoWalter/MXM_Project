@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: TormentedController
+  m_Controller: {fileID: 9100000, guid: 9172d94b1efcf0a49bff03da36cdebf3, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 1ec3505c62faf354fb502fe53c7a52b8, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: e12027825cab47f44b673e0cd661909a, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 8e2109a109c714a43923220bac1eb1a3, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 3deae981beb1ffa40a19fbbe70f7bfd9, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 93e06e30db57025448243cef624107ac, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 70f7999e0605e7c46b984a9d0de17bc6, type: 2}
