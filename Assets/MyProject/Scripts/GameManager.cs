@@ -114,8 +114,6 @@ public class GameManager : MonoBehaviourPunCallbacks
             timeToStartTxt.gameObject.SetActive(true);
             playAgain = false;
             youLose = false;
-            //playAgainVicBtn.interactable = true;
-            //playAgainDefBtn.interactable = true;
         }
         else playAgain = true;
     }

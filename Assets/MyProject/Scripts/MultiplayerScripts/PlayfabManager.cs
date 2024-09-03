@@ -3,11 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using PlayFab;
 using PlayFab.ClientModels;
-using System;
-using UnityEditor.PackageManager.Requests;
-using UnityEngine.UI;
 using TMPro;
-using UnityEngine.Device;
 
 public class PlayfabManager : MonoBehaviour
 {

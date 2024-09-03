@@ -75,8 +75,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.JoinLobby();
         LoadScreen(2);
-        //PhotonNetwork.ConnectUsingSettings();
-        //PhotonNetwork.LocalPlayer.NickName = nicknameInput.text;
     }
 
     public void PhotonLogin(string username)
@@ -97,7 +95,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void Ready()
     {
-        buttons.All(button => button.interactable = false);
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            buttons[i].interactable = false;
+        }
         readyBtn.interactable = false;
         photonView.RPC(nameof(ReadyRpc), RpcTarget.AllBuffered);
         ChatBox.instance.SendNotification("está pronto");
@@ -142,7 +143,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("On Connected To Master");
         LoadScreen(0);
-        //PhotonNetwork.JoinLobby();
     }
 
     public override void OnJoinedLobby()
