@@ -4,11 +4,13 @@ using UnityEngine;
 using PlayFab;
 using PlayFab.ClientModels;
 using TMPro;
+using System;
 
 public class PlayfabManager : MonoBehaviour
 {
     public static PlayfabManager instance;
     public string PlayfabID;
+    [HideInInspector] public bool isLogged;
 
     [Header("Warning screen")]
     [SerializeField] TextMeshProUGUI messageTxt;
@@ -35,6 +37,10 @@ public class PlayfabManager : MonoBehaviour
     
     [Header("Recover Account Information")]
     [SerializeField] TMP_InputField recoverEmailInput;
+
+    [Header("Ranking Informations")]
+    [SerializeField] RankingObjectScript rankingObject;
+    [SerializeField] GameObject rankingContent;
 
     Dictionary<string, string> playerData = new Dictionary<string, string>();
 
@@ -102,6 +108,21 @@ public class PlayfabManager : MonoBehaviour
                 ShowMessage("Conta criada com sucesso");
                 ShowScreens(1);
                 NetworkManager.instance.LoadScreen(9);
+
+                var re = new UpdateUserTitleDisplayNameRequest()
+                {
+                    DisplayName = username
+                };
+                PlayFabClientAPI.UpdateUserTitleDisplayName(re,
+                    result =>
+                    {
+
+                    },
+                    error =>
+                    {
+
+                    }
+                    );
             },
             error =>
             {
@@ -158,6 +179,9 @@ public class PlayfabManager : MonoBehaviour
 
     private void UserLoginSuccess(LoginResult result)
     {
+        //result.PlayFabId;
+        
+        isLogged = true;
         NetworkManager.instance.LoadScreen(2);
         NetworkManager.instance.PhotonLogin(usernameEmailLoginInput.text);
     }
@@ -221,6 +245,136 @@ public class PlayfabManager : MonoBehaviour
     private void DeleteAccountFailed(PlayFabError error)
     {
         ShowMessage($"Error {error.ErrorMessage}");
+    }
+    #endregion
+
+    //Região destinada ao manuseio do ranking
+    #region Ranking Controller
+    public void UpdatePlayerScore(int score)
+    {
+        var request = new UpdatePlayerStatisticsRequest()
+        {
+            Statistics = new List<StatisticUpdate> 
+            { 
+                new StatisticUpdate {StatisticName = "Ranking de vitórias", Value = score } 
+            }
+        };
+
+        PlayFabClientAPI.UpdatePlayerStatistics(request, UpdatePlayerScoreSuccess, UpdatePlayerScoreFailed);
+    }
+
+    private void UpdatePlayerScoreSuccess(UpdatePlayerStatisticsResult result)
+    {
+        throw new NotImplementedException();
+    }
+
+    private void UpdatePlayerScoreFailed(PlayFabError error)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void GetLeadrboard()
+    {
+        var request = new GetLeaderboardRequest()
+        {
+            StatisticName = "Ranking de vitórias",
+            StartPosition = 0,
+            MaxResultsCount = 10
+        };
+
+        PlayFabClientAPI.GetLeaderboard(request, GetLeaderboardSucces, GetLeaderboardFailed);
+    }
+
+    private void GetLeaderboardSucces(GetLeaderboardResult result)
+    {
+        foreach (var entry in result.Leaderboard)
+        {
+            GameObject rank = Instantiate(rankingObject.gameObject, rankingContent.transform);
+            rank.GetComponent<RankingObjectScript>().element.layoutPriority = entry.Position;
+            //rank.GetComponent<RankingObjectScript>().UpdateVisual(PlayfabID, GetUserVictories().ToString(), GetUserDefeats().ToString());
+        }
+    }
+
+    private void GetLeaderboardFailed(PlayFabError error)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SetUserData(int victoryNumber, int defeatNumber)
+    {
+        int victoryCount = GetUserVictories() + victoryNumber;
+        int defeatCount = GetUserDefeats() + defeatNumber;
+        PlayFabClientAPI.UpdateUserData(new UpdateUserDataRequest()
+        {
+            Data = new Dictionary<string, string>()
+            {
+                {"VictoryCount", victoryCount.ToString()},
+                {"DefeatCount", defeatCount.ToString()}
+        }
+        },
+            result =>
+            {
+                Debug.Log("dados atualizados");
+                UpdatePlayerScore(victoryCount - defeatCount);
+            },
+            error =>
+            {
+                Debug.Log(error.ErrorMessage);
+            }
+
+        );
+    }
+
+    public int GetUserVictories()
+    {
+        string victoryCount = "0";
+        PlayFabClientAPI.GetUserData(new GetUserDataRequest()
+        {
+            Keys = null
+        },
+            result =>
+            {
+                if (result == null || !result.Data.ContainsKey("VictoryCount"))
+                {
+                    Debug.Log("Sem chave");
+                }
+                else
+                {
+                    victoryCount = result.Data["VictoryCount"].Value;
+                }
+            },
+            error =>
+            {
+                
+            }
+             );
+        return int.Parse(victoryCount);
+    }
+
+    public int GetUserDefeats()
+    {
+        string defeatsCount = "0";
+        PlayFabClientAPI.GetUserData(new GetUserDataRequest()
+        {
+            Keys = null
+        },
+            result =>
+            {
+                if (result == null || !result.Data.ContainsKey("DefeatCount"))
+                {
+                    Debug.Log("Sem chave");
+                }
+                else
+                {
+                    defeatsCount = result.Data["DefeatCount"].Value;
+                }
+            },
+            error =>
+            {
+
+            }
+             );
+        return int.Parse(defeatsCount);
     }
     #endregion
 
