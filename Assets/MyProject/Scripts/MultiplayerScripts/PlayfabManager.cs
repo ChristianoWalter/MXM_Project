@@ -277,12 +277,13 @@ public class PlayfabManager : MonoBehaviour
 
     private void UpdatePlayerScoreSuccess(UpdatePlayerStatisticsResult result)
     {
-        throw new NotImplementedException();
+        GetLeaderboard();
     }
 
     private void UpdatePlayerScoreFailed(PlayFabError error)
     {
-        throw new NotImplementedException();
+        Debug.Log(error.ErrorMessage);
+        Debug.Log(error.HttpCode);
     }
 
     public void GetLeaderboard()
@@ -314,6 +315,7 @@ public class PlayfabManager : MonoBehaviour
 
     public void SetUserData(int victoryNumber, int defeatNumber)
     {
+        Debug.Log(PlayfabID);
         int victoryCount = GetUserVictories(PlayfabID) + victoryNumber;
         int defeatCount = GetUserDefeats(PlayfabID) + defeatNumber;
         PlayFabClientAPI.UpdateUserData(new UpdateUserDataRequest()
@@ -358,7 +360,7 @@ public class PlayfabManager : MonoBehaviour
             },
             error =>
             {
-                
+                Debug.Log(error.ErrorMessage);
             }
              );
         return int.Parse(victoryCount);
@@ -385,7 +387,7 @@ public class PlayfabManager : MonoBehaviour
             },
             error =>
             {
-
+                Debug.Log(error.ErrorMessage);
             }
              );
         return int.Parse(defeatsCount);

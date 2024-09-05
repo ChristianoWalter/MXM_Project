@@ -195,7 +195,7 @@ public class CharacterSet : MonoBehaviourPun
                 currentEnergy = Mathf.Clamp(currentEnergy + .2f, 0, maxEnergy);
                 defendDamage = false;
             }
-            Debug.Log(currentHealth);
+            //Debug.Log(currentHealth);
             //healthBar.SetHealth(currentHealth);
             if (photonView.IsMine) 
             { 
@@ -367,7 +367,7 @@ public class CharacterSet : MonoBehaviourPun
             }
             canAttack = true;
             gatlingCombo = 0;
-            Debug.Log(gatlingCombo);
+            //Debug.Log(gatlingCombo);
         }
     }
 
@@ -395,8 +395,8 @@ public class CharacterSet : MonoBehaviourPun
     protected void CallTrigger(string _triggerName)
     {
         anim.SetTrigger(_triggerName);
-        Debug.Log(_triggerName);
-        Debug.Log(anim.GetInteger("AttackType"));
+        //Debug.Log(_triggerName);
+        //Debug.Log(anim.GetInteger("AttackType"));
     }
     
     //método RPC para chamar o especial
@@ -406,7 +406,7 @@ public class CharacterSet : MonoBehaviourPun
         anim.SetInteger("AttackType", attackType);
         anim.SetTrigger(trigger);
         
-        Debug.Log($"ataque é {anim.GetInteger("AttackType")}");
+        //Debug.Log($"ataque é {anim.GetInteger("AttackType")}");
     }
 
     //m�todo para anima��es
