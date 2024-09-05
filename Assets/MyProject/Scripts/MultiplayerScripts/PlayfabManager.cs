@@ -179,11 +179,23 @@ public class PlayfabManager : MonoBehaviour
 
     private void UserLoginSuccess(LoginResult result)
     {
-        //result.PlayFabId;
-        
+        PlayfabID = result.PlayFabId;
+        string _username = "s";
+
+        PlayFabClientAPI.GetPlayerProfile(new GetPlayerProfileRequest()
+        {
+            PlayFabId = PlayfabID,
+            ProfileConstraints = new PlayerProfileViewConstraints()
+            {
+                ShowDisplayName = true
+            }
+        },
+        _result => _username = _result.PlayerProfile.DisplayName,
+        error => Debug.LogError(error.GenerateErrorReport()));
+
         isLogged = true;
         NetworkManager.instance.LoadScreen(2);
-        NetworkManager.instance.PhotonLogin(usernameEmailLoginInput.text);
+        NetworkManager.instance.PhotonLogin(_username);
     }
 
     private void UserLoginFailed(PlayFabError error)
@@ -273,7 +285,7 @@ public class PlayfabManager : MonoBehaviour
         throw new NotImplementedException();
     }
 
-    public void GetLeadrboard()
+    public void GetLeaderboard()
     {
         var request = new GetLeaderboardRequest()
         {
@@ -290,8 +302,8 @@ public class PlayfabManager : MonoBehaviour
         foreach (var entry in result.Leaderboard)
         {
             GameObject rank = Instantiate(rankingObject.gameObject, rankingContent.transform);
-            rank.GetComponent<RankingObjectScript>().element.layoutPriority = entry.Position;
-            //rank.GetComponent<RankingObjectScript>().UpdateVisual(PlayfabID, GetUserVictories().ToString(), GetUserDefeats().ToString());
+            //rank.GetComponent<RankingObjectScript>().element.layoutPriority = entry.Position;
+            rank.GetComponent<RankingObjectScript>().UpdateVisual(entry.DisplayName, GetUserVictories(entry.PlayFabId).ToString(), GetUserDefeats(entry.PlayFabId).ToString());
         }
     }
 
@@ -302,15 +314,15 @@ public class PlayfabManager : MonoBehaviour
 
     public void SetUserData(int victoryNumber, int defeatNumber)
     {
-        int victoryCount = GetUserVictories() + victoryNumber;
-        int defeatCount = GetUserDefeats() + defeatNumber;
+        int victoryCount = GetUserVictories(PlayfabID) + victoryNumber;
+        int defeatCount = GetUserDefeats(PlayfabID) + defeatNumber;
         PlayFabClientAPI.UpdateUserData(new UpdateUserDataRequest()
         {
             Data = new Dictionary<string, string>()
             {
                 {"VictoryCount", victoryCount.ToString()},
                 {"DefeatCount", defeatCount.ToString()}
-        }
+            }
         },
             result =>
             {
@@ -325,11 +337,12 @@ public class PlayfabManager : MonoBehaviour
         );
     }
 
-    public int GetUserVictories()
+    public int GetUserVictories(string _id)
     {
         string victoryCount = "0";
         PlayFabClientAPI.GetUserData(new GetUserDataRequest()
         {
+            PlayFabId = _id,
             Keys = null
         },
             result =>
@@ -351,11 +364,12 @@ public class PlayfabManager : MonoBehaviour
         return int.Parse(victoryCount);
     }
 
-    public int GetUserDefeats()
+    public int GetUserDefeats(string _id)
     {
         string defeatsCount = "0";
         PlayFabClientAPI.GetUserData(new GetUserDataRequest()
         {
+            PlayFabId = _id,
             Keys = null
         },
             result =>

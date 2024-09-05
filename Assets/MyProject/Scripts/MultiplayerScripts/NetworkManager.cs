@@ -36,6 +36,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [SerializeField] GameObject playerSelectionScreen;
     [SerializeField] GameObject mapSelectionScreen;
     [SerializeField] GameObject loginScreen;
+    [SerializeField] GameObject rankingScreen;
 
     [Header("Inputs para inserção de texto")]
     [SerializeField] TMP_InputField nicknameInput;
@@ -191,6 +192,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         playerSelectionScreen.SetActive(false);
         mapSelectionScreen.SetActive(false);
         loginScreen.SetActive(false);
+        rankingScreen.SetActive(false);
 
         switch (screenIndex)
         {
@@ -227,6 +229,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 break;
             case 9:
                 loginScreen.SetActive(true);
+                break;
+            case 10:
+                rankingScreen.SetActive(true);
+                PlayfabManager.instance.GetLeaderboard();
                 break;
         }
     }
