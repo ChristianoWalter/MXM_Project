@@ -194,12 +194,15 @@ public class PlayfabManager : MonoBehaviour
                 ShowDisplayName = true
             }
         },
-        _result => _username = _result.PlayerProfile.DisplayName,
+        _result => 
+        {
+            _username = _result.PlayerProfile.DisplayName;
+            NetworkManager.instance.PhotonLogin(_username);
+        },
         error => Debug.LogError(error.GenerateErrorReport()));
 
         isLogged = true;
         NetworkManager.instance.LoadScreen(2);
-        NetworkManager.instance.PhotonLogin(_username);
     }
 
     private void UserLoginFailed(PlayFabError error)
