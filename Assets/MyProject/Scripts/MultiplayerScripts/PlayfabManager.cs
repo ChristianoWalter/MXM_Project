@@ -5,6 +5,7 @@ using PlayFab;
 using PlayFab.ClientModels;
 using TMPro;
 using System;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class PlayfabManager : MonoBehaviour
 {
@@ -198,6 +199,7 @@ public class PlayfabManager : MonoBehaviour
         {
             _username = _result.PlayerProfile.DisplayName;
             NetworkManager.instance.PhotonLogin(_username);
+            GetUserData(0, 0);
         },
         error => Debug.LogError(error.GenerateErrorReport()));
 
@@ -284,7 +286,7 @@ public class PlayfabManager : MonoBehaviour
 
     private void UpdatePlayerScoreSuccess(UpdatePlayerStatisticsResult result)
     {
-        GetLeaderboard();
+        //GetLeaderboard();
     }
 
     private void UpdatePlayerScoreFailed(PlayFabError error)
@@ -309,12 +311,33 @@ public class PlayfabManager : MonoBehaviour
     {
         foreach (var entry in result.Leaderboard)
         {
-            int victories = GetUserVictories(entry.PlayFabId);
-            int defeats = GetUserDefeats(entry.PlayFabId);
-            GameObject rank = Instantiate(rankingObject.gameObject, rankingContent.transform);
-            rank.GetComponent<RankingObjectScript>().UpdateVisual(entry.DisplayName, victories.ToString(), defeats.ToString());
-            rankObjectList.Add(rank);
+            GetLeaderBoardWithPlayerdata(entry.PlayFabId, entry.DisplayName);
         }
+    }
+
+    private void GetLeaderboardFailed(PlayFabError error)
+    {
+        throw new NotImplementedException();
+    }
+
+    void GetLeaderBoardWithPlayerdata(string _id, string _username)
+    {
+        PlayFabClientAPI.GetUserData(new GetUserDataRequest()
+        {
+            PlayFabId = _id,
+            Keys = null
+        },
+            result =>
+            {
+                GameObject rank = Instantiate(rankingObject.gameObject, rankingContent.transform);
+                rank.GetComponent<RankingObjectScript>().UpdateVisual(_username, result.Data["VictoryCount"].Value, result.Data["DefeatCount"].Value);
+                rankObjectList.Add(rank);
+            },
+            error =>
+            {
+                Debug.Log(error.ErrorMessage);
+            }
+             );
     }
 
     public void ClearRankList()
@@ -323,11 +346,6 @@ public class PlayfabManager : MonoBehaviour
         {
             if (rankObjectList != null) Destroy(rankObjectList[i]);
         }
-    }
-
-    private void GetLeaderboardFailed(PlayFabError error)
-    {
-        throw new NotImplementedException();
     }
 
     public void SetUserData(int victoryNumber, int defeatNumber)
@@ -341,7 +359,8 @@ public class PlayfabManager : MonoBehaviour
             {
                 {"VictoryCount", victoryCount.ToString()},
                 {"DefeatCount", defeatCount.ToString()}
-            }
+            },
+            Permission = UserDataPermission.Public
         },
             result =>
             {
@@ -385,62 +404,6 @@ public class PlayfabManager : MonoBehaviour
                 gettingData = false;
             }
              );
-    }
-
-    public int GetUserVictories(string _id)
-    {
-        string victoryCount = "0";
-        PlayFabClientAPI.GetUserData(new GetUserDataRequest()
-        {
-            PlayFabId = _id,
-            Keys = null
-        },
-            result =>
-            {
-                if (result == null || !result.Data.ContainsKey("VictoryCount"))
-                {
-                    Debug.Log("Sem chave");
-                }
-                else
-                {
-                    Debug.Log("chave de vitoria");
-                    victoryCount = result.Data["VictoryCount"].Value;
-                }
-            },
-            error =>
-            {
-                Debug.Log(error.ErrorMessage);
-            }
-             );
-        return int.Parse(victoryCount);
-    }
-
-    public int GetUserDefeats(string _id)
-    {
-        string defeatsCount = "0";
-        PlayFabClientAPI.GetUserData(new GetUserDataRequest()
-        {
-            PlayFabId = _id,
-            Keys = null
-        },
-            result =>
-            {
-                if (result == null || !result.Data.ContainsKey("DefeatCount"))
-                {
-                    Debug.Log("Sem chave");
-                }
-                else
-                {
-                    Debug.Log("chave de derrota");
-                    defeatsCount = result.Data["DefeatCount"].Value;
-                }
-            },
-            error =>
-            {
-                Debug.Log(error.ErrorMessage);
-            }
-             );
-        return int.Parse(defeatsCount);
     }
     #endregion
 
