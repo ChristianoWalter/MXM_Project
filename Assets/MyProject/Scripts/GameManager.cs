@@ -152,12 +152,14 @@ public class GameManager : MonoBehaviourPunCallbacks
         gameFinished = true;
 
         if (youLose)
-        {
+        { 
+            PlayfabManager.instance.GetUserData();
             NetworkManager.instance.LoadScreen(8);
             PlayfabManager.instance.SetUserData(0, 1);
         }
         else
         {
+            PlayfabManager.instance.GetUserData();
             NetworkManager.instance.LoadScreen(7);
             PlayfabManager.instance.SetUserData(1, 0);
         }

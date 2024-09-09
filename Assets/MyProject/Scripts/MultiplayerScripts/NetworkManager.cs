@@ -193,6 +193,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         mapSelectionScreen.SetActive(false);
         loginScreen.SetActive(false);
         rankingScreen.SetActive(false);
+        PlayfabManager.instance.ClearRankList();
 
         switch (screenIndex)
         {

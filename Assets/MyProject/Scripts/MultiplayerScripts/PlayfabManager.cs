@@ -39,8 +39,12 @@ public class PlayfabManager : MonoBehaviour
     [SerializeField] TMP_InputField recoverEmailInput;
 
     [Header("Ranking Informations")]
+    bool gettingData;
+    int victories;
+    int defeats;
     [SerializeField] RankingObjectScript rankingObject;
     [SerializeField] GameObject rankingContent;
+    List <GameObject> rankObjectList = new List <GameObject>();
 
     Dictionary<string, string> playerData = new Dictionary<string, string>();
 
@@ -302,9 +306,19 @@ public class PlayfabManager : MonoBehaviour
     {
         foreach (var entry in result.Leaderboard)
         {
+            int victories = GetUserVictories(entry.PlayFabId);
+            int defeats = GetUserDefeats(entry.PlayFabId);
             GameObject rank = Instantiate(rankingObject.gameObject, rankingContent.transform);
-            //rank.GetComponent<RankingObjectScript>().element.layoutPriority = entry.Position;
-            rank.GetComponent<RankingObjectScript>().UpdateVisual(entry.DisplayName, GetUserVictories(entry.PlayFabId).ToString(), GetUserDefeats(entry.PlayFabId).ToString());
+            rank.GetComponent<RankingObjectScript>().UpdateVisual(entry.DisplayName, victories.ToString(), defeats.ToString());
+            rankObjectList.Add(rank);
+        }
+    }
+
+    public void ClearRankList()
+    {
+        for (int i = 0; i < rankObjectList.Count; i++)
+        {
+            if (rankObjectList != null) Destroy(rankObjectList[i]);
         }
     }
 
@@ -315,9 +329,10 @@ public class PlayfabManager : MonoBehaviour
 
     public void SetUserData(int victoryNumber, int defeatNumber)
     {
-        Debug.Log(PlayfabID);
-        int victoryCount = GetUserVictories(PlayfabID) + victoryNumber;
-        int defeatCount = GetUserDefeats(PlayfabID) + defeatNumber;
+        if (!isLogged) return;
+        while (gettingData) return; 
+        int victoryCount = victories + victoryNumber;
+        int defeatCount = defeats + defeatNumber;
         PlayFabClientAPI.UpdateUserData(new UpdateUserDataRequest()
         {
             Data = new Dictionary<string, string>()
@@ -339,6 +354,36 @@ public class PlayfabManager : MonoBehaviour
         );
     }
 
+    public void GetUserData()
+    {
+        gettingData = true;
+        PlayFabClientAPI.GetUserData(new GetUserDataRequest()
+        {
+            PlayFabId = PlayfabID,
+            Keys = null
+        },
+            result =>
+            {
+                if (result == null || !result.Data.ContainsKey("VictoryCount"))
+                {
+                    Debug.Log("Sem chave");
+                }
+                else
+                {
+                    Debug.Log("chave obtida");
+                    victories = int.Parse(result.Data["VictoryCount"].Value);
+                    defeats = int.Parse(result.Data["DefeatCount"].Value);
+                }
+                gettingData = false;
+            },
+            error =>
+            {
+                Debug.Log(error.ErrorMessage);
+                gettingData = false;
+            }
+             );
+    }
+
     public int GetUserVictories(string _id)
     {
         string victoryCount = "0";
@@ -355,6 +400,7 @@ public class PlayfabManager : MonoBehaviour
                 }
                 else
                 {
+                    Debug.Log("chave de vitoria");
                     victoryCount = result.Data["VictoryCount"].Value;
                 }
             },
@@ -382,6 +428,7 @@ public class PlayfabManager : MonoBehaviour
                 }
                 else
                 {
+                    Debug.Log("chave de derrota");
                     defeatsCount = result.Data["DefeatCount"].Value;
                 }
             },
