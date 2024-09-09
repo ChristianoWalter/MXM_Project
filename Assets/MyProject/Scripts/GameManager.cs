@@ -153,15 +153,15 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (youLose)
         { 
-            PlayfabManager.instance.GetUserData();
+            PlayfabManager.instance.GetUserData(0, 1);
             NetworkManager.instance.LoadScreen(8);
-            PlayfabManager.instance.SetUserData(0, 1);
+            //PlayfabManager.instance.SetUserData(0, 1);
         }
         else
         {
-            PlayfabManager.instance.GetUserData();
+            PlayfabManager.instance.GetUserData(1, 0);
             NetworkManager.instance.LoadScreen(7);
-            PlayfabManager.instance.SetUserData(1, 0);
+            //PlayfabManager.instance.SetUserData(1, 0);
         }
 
         if (PhotonNetwork.PlayerList[0] == PhotonNetwork.LocalPlayer)

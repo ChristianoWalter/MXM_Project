@@ -330,7 +330,6 @@ public class PlayfabManager : MonoBehaviour
     public void SetUserData(int victoryNumber, int defeatNumber)
     {
         if (!isLogged) return;
-        while (gettingData) { } 
         int victoryCount = victories + victoryNumber;
         int defeatCount = defeats + defeatNumber;
         PlayFabClientAPI.UpdateUserData(new UpdateUserDataRequest()
@@ -354,7 +353,7 @@ public class PlayfabManager : MonoBehaviour
         );
     }
 
-    public void GetUserData()
+    public void GetUserData(int _victory, int _defeat)
     {
         gettingData = true;
         PlayFabClientAPI.GetUserData(new GetUserDataRequest()
@@ -374,10 +373,11 @@ public class PlayfabManager : MonoBehaviour
                     victories = int.Parse(result.Data["VictoryCount"].Value);
                     defeats = int.Parse(result.Data["DefeatCount"].Value);
                 }
-                gettingData = false;
+                SetUserData(_victory, _defeat);
             },
             error =>
             {
+                SetUserData(_victory, _defeat);
                 Debug.Log(error.ErrorMessage);
                 gettingData = false;
             }
