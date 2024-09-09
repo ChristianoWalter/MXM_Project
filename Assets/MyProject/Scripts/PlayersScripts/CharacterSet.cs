@@ -377,7 +377,7 @@ public class CharacterSet : MonoBehaviourPun
         if (gatlingCombo < 2)
         {
             canAttack = true;
-            Debug.Log(gatlingCombo);
+            //Debug.Log(gatlingCombo);
         }
         else canAttack = false; 
         anim.SetBool("CanGatling", canAttack);

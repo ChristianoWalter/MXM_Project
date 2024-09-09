@@ -330,7 +330,7 @@ public class PlayfabManager : MonoBehaviour
     public void SetUserData(int victoryNumber, int defeatNumber)
     {
         if (!isLogged) return;
-        while (gettingData) return; 
+        while (gettingData) { } 
         int victoryCount = victories + victoryNumber;
         int defeatCount = defeats + defeatNumber;
         PlayFabClientAPI.UpdateUserData(new UpdateUserDataRequest()
