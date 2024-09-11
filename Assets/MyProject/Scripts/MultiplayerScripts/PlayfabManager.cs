@@ -311,49 +311,28 @@ public class PlayfabManager : MonoBehaviour
     {
         foreach (var entry in result.Leaderboard)
         {
-            GetLeaderBoardWithPlayerdata(entry.PlayFabId, entry.DisplayName);
-            /*PlayFabClientAPI.GetUserData(new GetUserDataRequest()
+            GameObject rank = Instantiate(rankingObject.gameObject, rankingContent.transform);
+            rankObjectList.Add(rank);
+            PlayFabClientAPI.GetUserData(new GetUserDataRequest()
             {
                 PlayFabId = entry.PlayFabId,
                 Keys = null
             },
             result =>
             {
-                GameObject rank = Instantiate(rankingObject.gameObject, rankingContent.transform);
                 rank.GetComponent<RankingObjectScript>().UpdateVisual(entry.DisplayName, result.Data["VictoryCount"].Value, result.Data["DefeatCount"].Value);
-                rankObjectList.Add(rank);
-            },
-            error =>
-            {
-                Debug.Log(error.ErrorMessage);
-            }
-             );*/
-        }
-    }
-
-    private void GetLeaderboardFailed(PlayFabError error)
-    {
-        throw new NotImplementedException();
-    }
-
-    void GetLeaderBoardWithPlayerdata(string _id, string _username)
-    {
-        GameObject rank = Instantiate(rankingObject.gameObject, rankingContent.transform);
-        rankObjectList.Add(rank);
-        PlayFabClientAPI.GetUserData(new GetUserDataRequest()
-        {
-            PlayFabId = _id,
-            Keys = null
-        },
-            result =>
-            {
-                rank.GetComponent<RankingObjectScript>().UpdateVisual(_username, result.Data["VictoryCount"].Value, result.Data["DefeatCount"].Value); 
             },
             error =>
             {
                 Debug.Log(error.ErrorMessage);
             }
              );
+        }
+    }
+
+    private void GetLeaderboardFailed(PlayFabError error)
+    {
+        throw new NotImplementedException();
     }
 
     public void ClearRankList()
