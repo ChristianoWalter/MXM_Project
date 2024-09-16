@@ -29,7 +29,7 @@ public class HealthBar : MonoBehaviourPunCallbacks
         slider.maxValue = health;
         slider.value = health;
 
-       fill.color = gradient.Evaluate(1f);
+       //fill.color = gradient.Evaluate(1f);
     }
 
     [PunRPC]
@@ -37,6 +37,6 @@ public class HealthBar : MonoBehaviourPunCallbacks
     {
         slider.value = health;
 
-        fill.color = gradient.Evaluate(slider.normalizedValue);
+        //fill.color = gradient.Evaluate(slider.normalizedValue);
     }
 }
