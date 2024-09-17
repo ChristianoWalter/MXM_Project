@@ -25,7 +25,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     [Header("Configurações da partida")]
     [SerializeField] TextMeshProUGUI gameTimeTxt;
     [SerializeField] TextMeshProUGUI timeToStartTxt;
-    [SerializeField] float timeToEnd;
+    public float gameTime;
+    public float timeToEnd;
     [SerializeField] float timeToStart = 4;
     [SerializeField] Button playAgainVicBtn;
     [SerializeField] Button playAgainDefBtn;
@@ -118,10 +119,18 @@ public class GameManager : MonoBehaviourPunCallbacks
         else playAgain = true;
     }
 
+    [PunRPC]
+    void SetTime(float time)
+    {
+        timeToEnd = time;
+        gameTimeTxt.text = ((int)timeToEnd).ToString("00");
+    }
+
     public void StartGame()
     {
         if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
         {
+            photonView.RPC(nameof(SetTime), RpcTarget.AllBuffered, gameTime);
             photonView.RPC(nameof(LoadLevel), RpcTarget.AllBuffered);
             level = PhotonNetwork.InstantiateRoomObject(NetworkManager.instance.currentLevel.name, Vector2.zero, Quaternion.identity);
             photonView.RPC(nameof(CreatePlayer), RpcTarget.AllBuffered);

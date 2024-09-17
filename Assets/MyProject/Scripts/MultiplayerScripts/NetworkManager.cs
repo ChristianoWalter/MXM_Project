@@ -41,6 +41,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [Header("Inputs para inserção de texto")]
     [SerializeField] TMP_InputField nicknameInput;
     [SerializeField] private TMP_InputField roomInput;
+    [SerializeField] TextMeshProUGUI gameTimeTxt;
+    float gameTime;
 
 
     private void Awake()
@@ -48,7 +50,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         if (instance == null)
         {
             instance = this;
-            LoadScreen(9);
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -57,10 +58,18 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
     }
 
+    private void Start()
+    {
+         LoadScreen(9);
+    }
+
+
+    #region Room Creation Methods
     //método utilizado para atrelar ao botão e criar a sala
     public void CreateRoom()
     {
-        RoomOptions roomOptions = new RoomOptions { IsVisible = true, MaxPlayers = 2 };
+        RoomOptions roomOptions = new RoomOptions {IsVisible = true, MaxPlayers = 2};
+        GameManager.instance.gameTime = gameTime;
         if (PhotonNetwork.CreateRoom("Sala:" + roomInput.text + " De:" + PhotonNetwork.LocalPlayer.NickName, roomOptions))
         {
             return;
@@ -70,6 +79,25 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             Debug.Log("Criação de sala falhou, tente novamente!");
         }
     }
+
+    public void IncrementGameTime()
+    {
+        if (gameTime < 120f)
+        {
+            gameTime += 15f;
+        }
+        gameTimeTxt.text = gameTime.ToString("0");
+    }
+
+    public void DecrementGameTime()
+    {
+        if (gameTime > 30f)
+        {
+            gameTime -= 15f;
+        }
+        gameTimeTxt.text = gameTime.ToString("0");
+    }
+    #endregion
 
     //método para atrelar ao botão e se conectar ao server
     public void PlayGame()
@@ -211,7 +239,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 playerSelectionScreen.SetActive(true);
                 break;
             case 4:
-                newRoomScreen.SetActive(true); 
+                newRoomScreen.SetActive(true);
+                gameTime = 90f;
+                gameTimeTxt.text = gameTime.ToString("0");
                 break;
             case 5:
                 playerUiScreen.SetActive(true);
