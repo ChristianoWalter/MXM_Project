@@ -265,6 +265,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 if (!PlayfabManager.instance.isLogged)
                 {
                     PlayfabManager.instance.ShowMessage("Precisa estar logado para acessar o ranking");
+                    mainMenuScreen.SetActive(true);
                     return;
                 }
                 rankingScreen.SetActive(true);
