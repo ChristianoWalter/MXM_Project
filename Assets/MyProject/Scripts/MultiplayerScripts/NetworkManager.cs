@@ -106,10 +106,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         LoadScreen(2);
     }
 
-    public void PhotonLogin(string username)
+    public void PhotonLogin()
     {
         PhotonNetwork.ConnectUsingSettings();
-        PhotonNetwork.LocalPlayer.NickName = username;
     }
     
     //região destinada a métodos de seleção de personagens e mapas
@@ -153,6 +152,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         buttons.All(button => button.interactable = true);
         characterSelected = false;
     }
+
+    void SetBtns()
+    {
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            buttons[i].interactable = true;
+        }
+        readyBtn.interactable = true;
+    }
     
     public void SelectLevel(GameObject _level)
     {
@@ -171,6 +179,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         Debug.Log("On Connected To Master");
+        PhotonNetwork.LocalPlayer.NickName = PlayfabManager.instance.username;
         LoadScreen(0);
     }
 
@@ -190,6 +199,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     //m�todo chamado ao entrar em uma sala
     public override void OnJoinedRoom()
     {
+        GameManager.instance.SetGameInstance();
+        SetBtns();
         Debug.Log("joinedRoom");
         LoadScreen(3);
         startMatchBtn.interactable = false;

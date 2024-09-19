@@ -268,13 +268,65 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 10478351434663158, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 10478351434663158, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 10478351434663158, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 10478351434663158, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 720669735784896275, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 720669735784896275, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 720669735784896275, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 720669735784896275, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 864278320029779296, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
       propertyPath: sceneViewId
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 1328351225083159657, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.3300016
+      objectReference: {fileID: 0}
     - target: {fileID: 1649850293805575088, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
       propertyPath: sceneViewId
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2654358876047047123, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2654358876047047123, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2654358876047047123, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2654358876047047123, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4690208988414661732, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
       propertyPath: sceneViewId
@@ -340,6 +392,10 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 8835088280721288734, guid: 495205131884a6e49bed6deb9d80d48f, type: 3}
+      propertyPath: rlPrefab
+      value: 
+      objectReference: {fileID: 4009463361591247356, guid: 37a848c8d84fdf74b86af37a8af96b36, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

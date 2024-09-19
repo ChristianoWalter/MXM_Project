@@ -22,6 +22,8 @@ public class LobbyRooms : MonoBehaviourPunCallbacks
     {
         base.OnRoomListUpdate(roomList);
 
+
+
         //Checa se esta listando
         foreach(RoomInfo roomInfo in roomList)
         {
@@ -44,9 +46,23 @@ public class LobbyRooms : MonoBehaviourPunCallbacks
             Destroy(CurrentRoom.Value.gameObject);
             CurrentRooms.Remove(CurrentRoom.Key);
         }
-
-
     }
 
+
+    /*void UpdateRoomList(List<RoomInfo> roomList)
+    {
+        for (int i = 0; i < roomList.Count; i++)
+        {
+            RoomInfo info = roomList[i];
+            if (info.RemovedFromList)
+            {
+                cachedRoomList.Remove(info.Name);
+            }
+            else
+            {
+                cachedRoomList[info.Name] = info;
+            }
+        }
+    }*/
 
 }

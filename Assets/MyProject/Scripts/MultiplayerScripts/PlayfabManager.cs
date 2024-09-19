@@ -24,6 +24,7 @@ public class PlayfabManager : MonoBehaviour
     public GameObject recoverAccountScreen;
 
     [Header("Login Information")]
+    [HideInInspector] public string username;
     [SerializeField] TMP_InputField usernameEmailLoginInput;
     [SerializeField] TMP_InputField passwordLoginInput;
 
@@ -40,9 +41,9 @@ public class PlayfabManager : MonoBehaviour
     [SerializeField] TMP_InputField recoverEmailInput;
 
     [Header("Ranking Informations")]
-    bool gettingData;
-    int victories;
-    int defeats;
+    [HideInInspector] public bool gettingData;
+    [HideInInspector] public int victories;
+    [HideInInspector] public int defeats;
     [SerializeField] RankingObjectScript rankingObject;
     [SerializeField] GameObject rankingContent;
     List <GameObject> rankObjectList = new List <GameObject>();
@@ -185,7 +186,6 @@ public class PlayfabManager : MonoBehaviour
     private void UserLoginSuccess(LoginResult result)
     {
         PlayfabID = result.PlayFabId;
-        string _username = "s";
 
         PlayFabClientAPI.GetPlayerProfile(new GetPlayerProfileRequest()
         {
@@ -197,9 +197,15 @@ public class PlayfabManager : MonoBehaviour
         },
         _result => 
         {
-            _username = _result.PlayerProfile.DisplayName;
-            NetworkManager.instance.PhotonLogin(_username);
-            GetUserData(0, 0);
+            username = _result.PlayerProfile.DisplayName;
+            StartCoroutine(LoadingPlayerData());
+            IEnumerator LoadingPlayerData()
+            {
+                gettingData = true;
+                GetVictoryNDefeat();
+                yield return new WaitUntil(() => !gettingData);
+            }
+            NetworkManager.instance.PhotonLogin();
         },
         error => Debug.LogError(error.GenerateErrorReport()));
 
@@ -216,7 +222,8 @@ public class PlayfabManager : MonoBehaviour
     public void BtnAnonimousLogin()
     {
         NetworkManager.instance.LoadScreen(2);
-        NetworkManager.instance.PhotonLogin(anonimousUsernameInput.text);
+        NetworkManager.instance.PhotonLogin();
+        username = anonimousUsernameInput.text;
     }
     #endregion
 
@@ -271,13 +278,14 @@ public class PlayfabManager : MonoBehaviour
 
     //Região destinada ao manuseio do ranking
     #region Ranking Controller
-    public void UpdatePlayerScore(int score)
+    public void UpdatePlayerScore()
     {
+        int value = victories - defeats;
         var request = new UpdatePlayerStatisticsRequest()
         {
             Statistics = new List<StatisticUpdate> 
             { 
-                new StatisticUpdate {StatisticName = "Ranking de vitórias", Value = score } 
+                new StatisticUpdate {StatisticName = "Ranking de vitórias", Value = value} 
             }
         };
 
@@ -287,10 +295,12 @@ public class PlayfabManager : MonoBehaviour
     private void UpdatePlayerScoreSuccess(UpdatePlayerStatisticsResult result)
     {
         //GetLeaderboard();
+        gettingData = false;
     }
 
     private void UpdatePlayerScoreFailed(PlayFabError error)
     {
+        gettingData = false;
         Debug.Log(error.ErrorMessage);
         Debug.Log(error.HttpCode);
     }
@@ -343,37 +353,36 @@ public class PlayfabManager : MonoBehaviour
         }
     }
 
-    public void SetUserData(int victoryNumber, int defeatNumber)
+    public void SaveVictoriesNDefeats()
     {
         if (!isLogged) return;
-        int victoryCount = victories + victoryNumber;
-        int defeatCount = defeats + defeatNumber;
         PlayFabClientAPI.UpdateUserData(new UpdateUserDataRequest()
         {
             Data = new Dictionary<string, string>()
             {
-                {"VictoryCount", victoryCount.ToString()},
-                {"DefeatCount", defeatCount.ToString()}
+                {"VictoryCount", victories.ToString()},
+                {"DefeatCount", defeats.ToString()}
             },
             Permission = UserDataPermission.Public
         },
             result =>
             {
+                gettingData = false;
                 Debug.Log("dados atualizados");
-                UpdatePlayerScore(victoryCount - defeatCount);
             },
             error =>
             {
+                gettingData = false;
                 Debug.Log(error.ErrorMessage);
             }
+            
 
         );
     }
 
-    public void GetUserData(int _victory, int _defeat)
+    public void GetVictoryNDefeat()
     {
         if (!isLogged) return;
-        gettingData = true;
         PlayFabClientAPI.GetUserData(new GetUserDataRequest()
         {
             PlayFabId = PlayfabID,
@@ -381,9 +390,11 @@ public class PlayfabManager : MonoBehaviour
         },
             result =>
             {
-                if (result == null || !result.Data.ContainsKey("VictoryCount"))
+                bool newAccount = false;
+                if (result == null || !result.Data.ContainsKey("VictoryCount") || !result.Data.ContainsKey("DefeatCount"))
                 {
                     Debug.Log("Sem chave");
+                    newAccount = true;
                 }
                 else
                 {
@@ -391,8 +402,8 @@ public class PlayfabManager : MonoBehaviour
                     victories = int.Parse(result.Data["VictoryCount"].Value);
                     defeats = int.Parse(result.Data["DefeatCount"].Value);
                 }
+                if (newAccount) SaveVictoriesNDefeats();
                 gettingData = false;
-                SetUserData(_victory, _defeat);
             },
             error =>
             {

@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void PlayAgain()
     {
-        photonView.RPC(nameof(PlayAgainRpc), RpcTarget.AllBuffered);
+        photonView.RPC(nameof(PlayAgainRpc), RpcTarget.All);
     }
 
     [PunRPC]
@@ -103,20 +103,41 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (playAgain)
         {
             if (playerOnePrefab != null) Destroy(playerOnePrefab);
-
             if (playerTwoPrefab != null) Destroy(playerTwoPrefab);
-
             if (level != null) Destroy(level);
+            /*if (PhotonNetwork.IsMasterClient)
+            {
+                PhotonNetwork.Destroy(playerOnePrefab);
+                PhotonNetwork.Destroy(playerTwoPrefab);
+                PhotonNetwork.Destroy(level);
+            }*/
 
-            NetworkManager.instance.LoadScreen(3);
             timeToStart = 4;
             gameStarted = false;
             gameFinished = false;
             timeToStartTxt.gameObject.SetActive(true);
             playAgain = false;
             youLose = false;
+            NetworkManager.instance.LoadScreen(3);
         }
         else playAgain = true;
+    }
+
+    public void SetGameInstance()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            if (playerOnePrefab != null) PhotonNetwork.Destroy(playerOnePrefab);
+            if (playerTwoPrefab != null) PhotonNetwork.Destroy(playerTwoPrefab);
+            if (level != null) PhotonNetwork.Destroy(level);
+        }
+
+        timeToStart = 4;
+        gameStarted = false;
+        gameFinished = false;
+        timeToStartTxt.gameObject.SetActive(true);
+        playAgain = false;
+        youLose = false;
     }
 
     [PunRPC]
@@ -152,25 +173,14 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void GameOver()
     {
         youLose = true;
-        photonView.RPC(nameof(EndGame), RpcTarget.AllBuffered);
+        photonView.RPC(nameof(EndGame), RpcTarget.All);
     }
 
     [PunRPC]
     void EndGame()
     {
         gameFinished = true;
-
-        if (youLose)
-        { 
-            PlayfabManager.instance.GetUserData(0, 1);
-            NetworkManager.instance.LoadScreen(8);
-        }
-        else
-        {
-            PlayfabManager.instance.GetUserData(1, 0);
-            NetworkManager.instance.LoadScreen(7);
-        }
-
+        
         if (PhotonNetwork.PlayerList[0] == PhotonNetwork.LocalPlayer)
         {
             playerOnePrefab.GetComponent<PlayerController>().isInMatch = false;
@@ -179,6 +189,27 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             playerTwoPrefab.GetComponent<PlayerController>().isInMatch = false;
         }
+
+        if (youLose)
+        {
+            PlayfabManager.instance.defeats++;
+            NetworkManager.instance.LoadScreen(8);
+        }
+        else
+        {
+            PlayfabManager.instance.victories++;
+            NetworkManager.instance.LoadScreen(7);
+        }
+        StartCoroutine(UpdateScore());
+        IEnumerator UpdateScore()
+        {
+            PlayfabManager.instance.gettingData = true;
+            PlayfabManager.instance.SaveVictoriesNDefeats();
+            yield return new WaitUntil(() => !PlayfabManager.instance.gettingData);
+            PlayfabManager.instance.gettingData = true;
+            PlayfabManager.instance.UpdatePlayerScore();
+        }
+
     }
     
     [PunRPC]
