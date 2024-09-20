@@ -255,6 +255,11 @@ public class PlayfabManager : MonoBehaviour
 
     public void DeleteAccount()
     {
+        if (!isLogged)
+        {
+            ShowMessage("Precisa estar logado para deletar conta");
+            return;
+        }
         ExecuteCloudScriptRequest request = new ExecuteCloudScriptRequest()
         {
             FunctionName = "deletePlayerAccount",

@@ -37,6 +37,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [SerializeField] GameObject mapSelectionScreen;
     [SerializeField] GameObject loginScreen;
     [SerializeField] GameObject rankingScreen;
+    [SerializeField] GameObject configScreen;
 
     [Header("Inputs para inserção de texto")]
     [SerializeField] TMP_InputField nicknameInput;
@@ -160,6 +161,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             buttons[i].interactable = true;
         }
         readyBtn.interactable = true;
+        startMatchBtn.interactable = true;
     }
     
     public void SelectLevel(GameObject _level)
@@ -232,6 +234,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         mapSelectionScreen.SetActive(false);
         loginScreen.SetActive(false);
         rankingScreen.SetActive(false);
+        configScreen.SetActive(false);
         PlayfabManager.instance.ClearRankList();
 
         switch (screenIndex)
@@ -281,6 +284,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 }
                 rankingScreen.SetActive(true);
                 PlayfabManager.instance.GetLeaderboard();
+                break;
+            case 11:
+                configScreen.SetActive(true);
                 break;
         }
     }
