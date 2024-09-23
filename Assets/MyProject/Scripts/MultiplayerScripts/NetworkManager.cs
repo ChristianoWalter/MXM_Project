@@ -38,6 +38,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [SerializeField] GameObject loginScreen;
     [SerializeField] GameObject rankingScreen;
     [SerializeField] GameObject configScreen;
+    [SerializeField] GameObject singleModeScreen;
 
     [Header("Inputs para inserção de texto")]
     [SerializeField] TMP_InputField nicknameInput;
@@ -79,6 +80,23 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             Debug.Log("Criação de sala falhou, tente novamente!");
         }
+    }
+
+    public void CreateSingleRoom()
+    {
+        SingleMode.instance.isSinglePLayer = true;
+        PhotonNetwork.JoinLobby();
+        LoadScreen(2);
+        /*RoomOptions roomOptions = new RoomOptions { IsVisible = false, MaxPlayers = 21 };
+        if (PhotonNetwork.CreateRoom("Sala: Privada" + " De:" + PhotonNetwork.LocalPlayer.NickName, roomOptions))
+        {
+            return;
+        }
+        else
+        {
+            Debug.Log("Criação de sala falhou, tente novamente!");
+        }*/
+
     }
 
     public void IncrementGameTime()
@@ -188,24 +206,41 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         Debug.Log("Joined Lobby");
-        LoadScreen(1);
+        if (!SingleMode.instance.isSinglePLayer) LoadScreen(1);
+        else
+        {
+            RoomOptions roomOptions = new RoomOptions { IsVisible = false, MaxPlayers = 1 };
+            if (PhotonNetwork.CreateRoom("Sala: Privada" + " De:" + PhotonNetwork.LocalPlayer.NickName, roomOptions))
+            {
+                return;
+            }
+            else
+            {
+                Debug.Log("Criação de sala falhou, tente novamente!");
+            }
+        }
     }
 
 
     public override void OnCreatedRoom()
     {
         Debug.Log("Created Room");
+
         LoadScreen(2);
     }
 
     //m�todo chamado ao entrar em uma sala
     public override void OnJoinedRoom()
     {
-        GameManager.instance.SetGameInstance();
-        SetBtns();
-        Debug.Log("joinedRoom");
-        LoadScreen(3);
-        startMatchBtn.interactable = false;
+        if (!SingleMode.instance.isSinglePLayer)
+        {
+            GameManager.instance.SetGameInstance();
+            SetBtns();
+            Debug.Log("joinedRoom");
+            LoadScreen(3);
+            startMatchBtn.interactable = false;
+        }
+        else LoadScreen(12);
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -235,6 +270,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         loginScreen.SetActive(false);
         rankingScreen.SetActive(false);
         configScreen.SetActive(false);
+        singleModeScreen.SetActive(false);
         PlayfabManager.instance.ClearRankList();
 
         switch (screenIndex)
@@ -287,6 +323,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 break;
             case 11:
                 configScreen.SetActive(true);
+                break;
+            case 12:
+                singleModeScreen.SetActive(true);
                 break;
         }
     }

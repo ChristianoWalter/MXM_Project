@@ -430,6 +430,7 @@ MonoBehaviour:
   healthBar: {fileID: 0}
   energyBar: {fileID: 0}
   currentHealth: 0
+  isPuppet: 0
   canMove: 1
   isCrouched: 0
   moveSpeed: 7
@@ -637,6 +638,10 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 6639f49c-ce0c-4cd9-84a7-f4964884708a
     m_ActionName: Player/Crouch[/Keyboard/s]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 9bf1a125-c194-461b-bb8b-74c09f7378fe
+    m_ActionName: Player/Pause[/Keyboard/escape]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

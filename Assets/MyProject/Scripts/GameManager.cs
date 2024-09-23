@@ -23,8 +23,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     public EnergyBar energyBarTwo;
 
     [Header("Configurações da partida")]
-    [SerializeField] TextMeshProUGUI gameTimeTxt;
-    [SerializeField] TextMeshProUGUI timeToStartTxt;
+    [SerializeField] public TextMeshProUGUI gameTimeTxt;
+    [SerializeField] public TextMeshProUGUI timeToStartTxt;
     public float gameTime;
     public float timeToEnd;
     [SerializeField] float timeToStart = 4;
@@ -49,6 +49,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void Update()
     {
+        if (SingleMode.instance.isSinglePLayer) return;
         RunGameTime();
     }
 
@@ -151,10 +152,10 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
         {
-            photonView.RPC(nameof(SetTime), RpcTarget.AllBuffered, gameTime);
-            photonView.RPC(nameof(LoadLevel), RpcTarget.AllBuffered);
+            photonView.RPC(nameof(SetTime), RpcTarget.All, gameTime);
+            photonView.RPC(nameof(LoadLevel), RpcTarget.All);
             level = PhotonNetwork.InstantiateRoomObject(NetworkManager.instance.currentLevel.name, Vector2.zero, Quaternion.identity);
-            photonView.RPC(nameof(CreatePlayer), RpcTarget.AllBuffered);
+            photonView.RPC(nameof(CreatePlayer), RpcTarget.All);
         }
     }
     

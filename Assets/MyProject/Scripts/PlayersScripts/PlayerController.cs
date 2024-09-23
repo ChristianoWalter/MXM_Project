@@ -19,6 +19,7 @@ public class PlayerController : CharacterSet
         //execução do método mãe
         base.Awake();
 
+        if (isPuppet) return;
         if (photonView.IsMine) canInputJump = true;
         else rb.isKinematic = true;
     }
@@ -26,7 +27,7 @@ public class PlayerController : CharacterSet
     protected override void Update()
     {
         base.Update();
-        if (!photonView.IsMine || !isInMatch) return;
+        if (!photonView.IsMine || !isInMatch || isPuppet) return;
 
             //método de controle da velocidade e movimentaçãodo player
         if (canMove) rb.velocity = new Vector2(inputDirection.x * moveSpeed, rb.velocity.y);

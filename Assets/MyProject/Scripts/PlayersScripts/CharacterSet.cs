@@ -10,11 +10,13 @@ public class CharacterSet : MonoBehaviourPun
     [Header("Base Stats")]
     //status de vida do Player
     [SerializeField] protected bool isInvencible;
-    [SerializeField] float maxHealth;
-    [SerializeField] HealthBar healthBar;
+    [SerializeField] protected float maxHealth;
+    [SerializeField] protected HealthBar healthBar;
     [SerializeField] EnergyBar energyBar;
     //Est� em serializefield para testes de funcionamento, ap�s testado e aprovado remover o serializefield
     public float currentHealth;
+
+    public bool isPuppet; 
 
     //status de movimenta��o do Player
     public bool canMove;
@@ -93,7 +95,8 @@ public class CharacterSet : MonoBehaviourPun
         currentDefenseShield = maxDefenseShield;
         currentEnergy = maxEnergy;
 
-        StartCoroutine(SetPlayerStatus());
+        if (SingleMode.instance.isSinglePLayer) StartCoroutine(SetPlayerSingle());
+        else StartCoroutine(SetPlayerStatus());
     }
 
     private IEnumerator SetPlayerStatus()
@@ -144,6 +147,38 @@ public class CharacterSet : MonoBehaviourPun
                     oponentLayer = LayerMask.GetMask("PlayerTwo");
                     gameObject.tag = "Player";
             }
+        }
+    }
+
+    private IEnumerator SetPlayerSingle()
+    {
+        Debug.Log("Funciona");
+        //seleção da layer do adiversário com base na do player (layer de aplicação do dano)
+        if (!isPuppet)
+        {
+            yield return new WaitUntil(() => SingleMode.instance.puppetInGame != null);
+            oponentDirection = SingleMode.instance.puppetInGame.transform;
+            gameObject.layer = 6;
+            oponentLayer = LayerMask.GetMask("PlayerTwo");
+            gameObject.tag = "Player";
+
+            healthBar = GameManager.instance.healthBarOne;
+            energyBar = GameManager.instance.energyBarOne;
+            healthBar.SetMaxValue(maxHealth);
+            energyBar.SetMaxValue(maxEnergy);  
+        }
+        else
+        {
+            yield return new WaitUntil(() => SingleMode.instance.playerCharacterInGame != null);
+            oponentDirection = SingleMode.instance.playerCharacterInGame.transform;
+            gameObject.layer = 7;
+            oponentLayer = LayerMask.GetMask("PlayerOne");
+            gameObject.tag = "PlayerTwo";
+
+            healthBar = GameManager.instance.healthBarTwo;
+            energyBar = GameManager.instance.energyBarTwo;
+            healthBar.SetMaxValue(maxHealth);
+            energyBar.SetMaxValue(maxEnergy);
         }
     }
 
@@ -284,7 +319,7 @@ public class CharacterSet : MonoBehaviourPun
     }
 
     //m�todo de efeito de dano
-    public void DamageEffect(float _knockback, float _knockup, bool _isDefended)
+    public virtual void DamageEffect(float _knockback, float _knockup, bool _isDefended)
     {
         //mudan�a de efeitos em caso de defesa
         if (_isDefended)

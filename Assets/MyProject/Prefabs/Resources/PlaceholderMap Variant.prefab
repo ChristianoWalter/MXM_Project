@@ -9,6 +9,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 247667173731126130, guid: 9b8a316a97e37bc44ab31ac6c7276b7e, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 247667173731126130, guid: 9b8a316a97e37bc44ab31ac6c7276b7e, type: 3}
       propertyPath: m_Color.b
       value: 0
       objectReference: {fileID: 0}
@@ -73,6 +77,10 @@ PrefabInstance:
       value: PlaceholderMap Variant
       objectReference: {fileID: 0}
     - target: {fileID: 7514593890171239948, guid: 9b8a316a97e37bc44ab31ac6c7276b7e, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7514593890171239948, guid: 9b8a316a97e37bc44ab31ac6c7276b7e, type: 3}
       propertyPath: m_Color.b
       value: 0
       objectReference: {fileID: 0}
@@ -89,6 +97,10 @@ PrefabInstance:
       value: -9.03
       objectReference: {fileID: 0}
     - target: {fileID: 8425658479513937595, guid: 9b8a316a97e37bc44ab31ac6c7276b7e, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8425658479513937595, guid: 9b8a316a97e37bc44ab31ac6c7276b7e, type: 3}
       propertyPath: m_Color.b
       value: 0
       objectReference: {fileID: 0}
@@ -101,7 +113,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 592394785640845374, guid: 9b8a316a97e37bc44ab31ac6c7276b7e, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9b8a316a97e37bc44ab31ac6c7276b7e, type: 3}
