@@ -208,6 +208,8 @@ public class CharacterSet : MonoBehaviourPun
         {
             bool defendDamage;
 
+            isInvencible = true;
+            StartCoroutine(TurnVencible());
             //evento de mitiga��o de dano
             if (isDefending && _canDefend)
             {
@@ -328,8 +330,8 @@ public class CharacterSet : MonoBehaviourPun
         }
         else
         {
-            rb.velocity = new Vector2(_knockback * transform.localScale.x * -1, _knockup);
             StartCoroutine(DamagedMove());
+            rb.velocity = new Vector2(_knockback * transform.localScale.x * -1, _knockup);
             photonView.RPC(nameof(CallTrigger), RpcTarget.All, "Damaged");
             //anim.SetTrigger("Damaged");
 
@@ -353,9 +355,15 @@ public class CharacterSet : MonoBehaviourPun
     private IEnumerator DamagedMove()
     {
         canMove = false;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(.1f);
         canMove = true;
 
+    }
+    
+    private IEnumerator TurnVencible()
+    {
+        yield return new WaitForSeconds(.2f);
+        isInvencible = false;
     }
     #endregion
 
