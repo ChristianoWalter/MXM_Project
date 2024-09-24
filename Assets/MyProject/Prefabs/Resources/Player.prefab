@@ -426,7 +426,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInvencible: 0
-  maxHealth: 20
+  maxHealth: 250
   healthBar: {fileID: 0}
   energyBar: {fileID: 0}
   currentHealth: 0
@@ -437,12 +437,13 @@ MonoBehaviour:
   jumpForce: 10
   currentDamage: 0
   damages:
-  - 2
-  - 4
-  - 7
-  - 7
-  - 7
-  - 7
+  - 9
+  - 17
+  - 24
+  specialDamages:
+  - 40
+  - 33
+  - 18
   currentAttackRange: 0
   attackRanges:
   - 0.4

@@ -29,6 +29,7 @@ public class CharacterSet : MonoBehaviourPun
     //Ap�s testado e aprovado remover o serializefield
     [SerializeField]protected float currentDamage;
     [SerializeField] protected float[] damages;
+    [SerializeField] protected float[] specialDamages;
     //Ap�s testado e aprovado remover o serializefield
     [SerializeField] protected float currentAttackRange;
     [SerializeField] protected float[] attackRanges;
@@ -300,7 +301,7 @@ public class CharacterSet : MonoBehaviourPun
             gatlingCombo = 1;
             currentKnockupValue = specialKnockupValues[(int)specialAttacks];
             currentKnockbackValue = specialKnockbackValues[(int)specialAttacks];
-            currentDamage = damages[(int)specialAttacks];
+            currentDamage = specialDamages[(int)specialAttacks];
             currentAttackRange = attackRanges[(int)specialAttacks];
             canAttack = false;
             canMove = false;
@@ -355,14 +356,14 @@ public class CharacterSet : MonoBehaviourPun
     private IEnumerator DamagedMove()
     {
         canMove = false;
-        yield return new WaitForSeconds(.1f);
+        yield return new WaitForSeconds(.3f);
         canMove = true;
 
     }
     
     private IEnumerator TurnVencible()
     {
-        yield return new WaitForSeconds(.2f);
+        yield return new WaitForSeconds(.4f);
         isInvencible = false;
     }
     #endregion

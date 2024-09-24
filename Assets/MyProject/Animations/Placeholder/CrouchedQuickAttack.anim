@@ -22,11 +22,11 @@ AnimationClip:
     curve:
     - time: 0
       value: {fileID: 21300000, guid: 8216ee31634e6df48b919381637219e1, type: 3}
-    - time: 0.05
+    - time: 0.1
       value: {fileID: 21300000, guid: 879c4a1b0bd6ea54e8feb44cf5abf5b3, type: 3}
-    - time: 0.083333336
+    - time: 0.16666667
       value: {fileID: 21300000, guid: 86cbbbd40f49a0e4aa47905112940343, type: 3}
-    - time: 0.13333334
+    - time: 0.26666668
       value: {fileID: 21300000, guid: 86cbbbd40f49a0e4aa47905112940343, type: 3}
     attribute: m_Sprite
     path: 
@@ -59,7 +59,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.15
+    m_StopTime: 0.28333336
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -79,14 +79,14 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.05
+  - time: 0.1
     functionName: ApplyDamage
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.06666667
+  - time: 0.11666667
     functionName: ApplyDamage
     data: 
     objectReferenceParameter: {fileID: 0}
@@ -94,6 +94,20 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.13333334
+    functionName: ApplyDamage
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.15
+    functionName: ApplyDamage
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.26666668
     functionName: RecalAttack
     data: 
     objectReferenceParameter: {fileID: 0}

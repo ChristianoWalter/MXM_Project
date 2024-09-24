@@ -131,7 +131,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInvencible: 0
-  maxHealth: 20
+  maxHealth: 250
   healthBar: {fileID: 0}
   energyBar: {fileID: 0}
   currentHealth: 0
