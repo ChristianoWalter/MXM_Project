@@ -446,8 +446,8 @@ MonoBehaviour:
   - 18
   currentAttackRange: 0
   attackRanges:
-  - 0.4
-  - 0.4
+  - 0.2
+  - 0.2
   - 0.4
   - 0.4
   - 0.4
@@ -464,9 +464,9 @@ MonoBehaviour:
   - 4
   - 0
   knockbackValues:
-  - 4
-  - 0
-  - 15
+  - 6
+  - 6
+  - 10
   specialAttacks: 0
   specialKnockupValues:
   - 0
@@ -475,8 +475,8 @@ MonoBehaviour:
   specialKnockbackValues:
   - 10
   - 1
-  - 0
-  maxEnergy: 10
+  - 10
+  maxEnergy: 5
   currentEnergy: 0
   energyCost:
   - 1

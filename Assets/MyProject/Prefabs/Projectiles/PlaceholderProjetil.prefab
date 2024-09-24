@@ -190,6 +190,6 @@ MonoBehaviour:
   timeToDestroy: 0.2
   anim: {fileID: 6892444318601076311}
   canBeDefended: 0
-  damage: 2
+  damage: 40
   knockbackValue: 0
   knockupValue: 0

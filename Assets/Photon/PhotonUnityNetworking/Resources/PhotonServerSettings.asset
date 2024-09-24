@@ -75,6 +75,7 @@ MonoBehaviour:
   - NotificationLog
   - SetTime
   - UpdateRoomBtns
+  - DamageEffect
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

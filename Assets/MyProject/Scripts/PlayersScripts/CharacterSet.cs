@@ -243,7 +243,7 @@ public class CharacterSet : MonoBehaviourPun
 
             //evento p�s mitiga��o de dano
             if (currentHealth == 0) Death();
-            else if (currentHealth > 0) DamageEffect(_knockback, _knockup, defendDamage);
+            else if (currentHealth > 0) photonView.RPC(nameof(DamageEffect), RpcTarget.All, _knockback, _knockup, defendDamage);//DamageEffect(_knockback, _knockup, defendDamage);
         }
     }
 
@@ -322,10 +322,11 @@ public class CharacterSet : MonoBehaviourPun
     }
 
     //m�todo de efeito de dano
+    [PunRPC]
     public virtual void DamageEffect(float _knockback, float _knockup, bool _isDefended)
     {
         //mudan�a de efeitos em caso de defesa
-        if (_isDefended)
+        if (isDefending)
         {
 
         }
@@ -383,7 +384,7 @@ public class CharacterSet : MonoBehaviourPun
             enemy.GetComponent<CharacterSet>().photonView.RPC(nameof(DamageRPC), RpcTarget.All, currentDamage, currentKnockbackValue, currentKnockupValue, true, isCrouched, false); 
             if(enemy.GetComponent<CharacterSet>().isDefending == false)
             {
-                currentEnergy = Mathf.Clamp(currentEnergy + .4f, 0, maxEnergy);
+                currentEnergy = Mathf.Clamp(currentEnergy + .2f, 0, maxEnergy);
                 energyBar.UpdateValue(currentEnergy);
                 GatlingActivate();
             }

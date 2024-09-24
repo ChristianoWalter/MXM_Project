@@ -142,6 +142,7 @@ MonoBehaviour:
   jumpForce: 0
   currentDamage: 0
   damages: []
+  specialDamages: []
   currentAttackRange: 0
   attackRanges: []
   canAttack: 0

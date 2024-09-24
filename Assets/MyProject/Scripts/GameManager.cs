@@ -103,9 +103,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         if (playAgain)
         {
-            if (playerOnePrefab != null) Destroy(playerOnePrefab);
-            if (playerTwoPrefab != null) Destroy(playerTwoPrefab);
-            if (level != null) Destroy(level);
+            if (playerOnePrefab != null) PhotonNetwork.Destroy(playerOnePrefab);
+            if (playerTwoPrefab != null) PhotonNetwork.Destroy(playerTwoPrefab);
+            if (level != null) PhotonNetwork.Destroy(level);
             /*if (PhotonNetwork.IsMasterClient)
             {
                 PhotonNetwork.Destroy(playerOnePrefab);
