@@ -56,7 +56,8 @@ public class PlayerController : CharacterSet
         if (value.performed)
         {
             currentAttackType = attackTypes.quickAttack;
-            StartCoroutine(Attacking());
+            //StartCoroutine(Attacking());
+            Attack();
         }
     }
 
@@ -67,7 +68,8 @@ public class PlayerController : CharacterSet
         if (value.performed)
         {
             currentAttackType = attackTypes.mediumAttack;
-            StartCoroutine(Attacking());
+            //StartCoroutine(Attacking());
+            Attack();
         }
     }
 
@@ -78,7 +80,8 @@ public class PlayerController : CharacterSet
         if (value.performed)
         {
             currentAttackType = attackTypes.heavyAttack;
-            StartCoroutine(Attacking());
+            //StartCoroutine(Attacking());
+            Attack();
         }
     }
     

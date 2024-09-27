@@ -248,27 +248,26 @@ public class CharacterSet : MonoBehaviourPun
         }
     }
 
-    /*protected virtual void Attack()
+    protected virtual void Attack()
     {
-        if (canAttack)
-        {
-            if (OnGround()) canMove = false;
-            else gatlingCombo = 1;
+        if (OnGround()) canMove = false;
+        currentDamage = damages[(int)currentAttackType];
+        currentAttackRange = attackRanges[(int)currentAttackType];
+        currentKnockbackValue = knockbackValues[(int)currentAttackType];
+        currentKnockupValue = knockupValues[(int)currentAttackType];
 
-            anim.SetInteger("AttackType", (int)currentAttackType);
-            currentDamage = damages[(int)currentAttackType];
-            currentAttackRange = attackRanges[(int)currentAttackType];
-            
-            if(!isCrouched) currentAttackPoint = attackPoints[0];
-            else currentAttackPoint = attackPoints[1];
-            
-            canAttack = false;
-            anim.SetTrigger("Attack");
-        }
-    }*/
+        if (!isCrouched) currentAttackPoint = attackPoints[0];
+        else currentAttackPoint = attackPoints[1];
+
+        canAttack = false;
+        photonView.RPC(nameof(CallAttack), RpcTarget.All, (int)currentAttackType, "Attack");
+        gatlingCombo++;
+
+        anim.SetBool("CanGatling", canAttack);
+    }
 
     //M�todo para chamar ataque b�sico
-    protected IEnumerator Attacking()
+    /*protected IEnumerator Attacking()
     {
         if (OnGround()) canMove = false;
         //else gatlingCombo = 1;
@@ -291,7 +290,7 @@ public class CharacterSet : MonoBehaviourPun
 
         anim.SetBool("CanGatling", canAttack);
         //yield return new WaitForSeconds(.1f);
-    }
+    }*/
 
     //M�todo para chamar ataque especial
     protected virtual void SpecialAttack()
