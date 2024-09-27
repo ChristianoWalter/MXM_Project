@@ -47,6 +47,7 @@ public class CharacterSet : MonoBehaviourPun
     [SerializeField] protected float[] knockupValues;
     [SerializeField] protected float[] knockbackValues;
     protected int gatlingCombo;
+    protected bool callingAttack;
 
     [Header("Special Stats")]
     //Ap�s testado e aprovado remover o serializefield
@@ -284,11 +285,12 @@ public class CharacterSet : MonoBehaviourPun
         canAttack = false;
         //anim.SetTrigger("Attack"); 
         //photonView.RPC(nameof(CallTrigger), RpcTarget.All, "Attack");
+        //callingAttack = true;
         photonView.RPC(nameof(CallAttack), RpcTarget.All, (int)currentAttackType, "Attack");
         gatlingCombo++;
 
-        yield return new WaitForSeconds(.1f);
         anim.SetBool("CanGatling", canAttack);
+        //yield return new WaitForSeconds(.1f);
     }
 
     //M�todo para chamar ataque especial
@@ -450,7 +452,7 @@ public class CharacterSet : MonoBehaviourPun
     {
         anim.SetInteger("AttackType", attackType);
         anim.SetTrigger(trigger);
-        
+        //callingAttack = false;
         //Debug.Log($"ataque é {anim.GetInteger("AttackType")}");
     }
 

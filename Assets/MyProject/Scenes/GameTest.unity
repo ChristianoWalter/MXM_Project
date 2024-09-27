@@ -215,87 +215,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &671306047
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: -1029693348560865227, guid: fbb4b4e669624b64db1bbefd10bdb09e, type: 3}
-      propertyPath: sceneViewId
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2987252375664264159, guid: fbb4b4e669624b64db1bbefd10bdb09e, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 3.5915499
-      objectReference: {fileID: 0}
-    - target: {fileID: 2987252375664264159, guid: fbb4b4e669624b64db1bbefd10bdb09e, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1.0379369
-      objectReference: {fileID: 0}
-    - target: {fileID: 2987252375664264159, guid: fbb4b4e669624b64db1bbefd10bdb09e, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2987252375664264159, guid: fbb4b4e669624b64db1bbefd10bdb09e, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2987252375664264159, guid: fbb4b4e669624b64db1bbefd10bdb09e, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2987252375664264159, guid: fbb4b4e669624b64db1bbefd10bdb09e, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2987252375664264159, guid: fbb4b4e669624b64db1bbefd10bdb09e, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2987252375664264159, guid: fbb4b4e669624b64db1bbefd10bdb09e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2987252375664264159, guid: fbb4b4e669624b64db1bbefd10bdb09e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2987252375664264159, guid: fbb4b4e669624b64db1bbefd10bdb09e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4734025284642071946, guid: fbb4b4e669624b64db1bbefd10bdb09e, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.15
-      objectReference: {fileID: 0}
-    - target: {fileID: 4734025284642071946, guid: fbb4b4e669624b64db1bbefd10bdb09e, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.03
-      objectReference: {fileID: 0}
-    - target: {fileID: 6228595006041228738, guid: fbb4b4e669624b64db1bbefd10bdb09e, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 22100000, guid: 749c80cc4b8031f45959596149ea7ddd, type: 2}
-    - target: {fileID: 7295895933586343584, guid: fbb4b4e669624b64db1bbefd10bdb09e, type: 3}
-      propertyPath: m_Name
-      value: TormentPlayer
-      objectReference: {fileID: 0}
-    - target: {fileID: 7835007755044958460, guid: fbb4b4e669624b64db1bbefd10bdb09e, type: 3}
-      propertyPath: sceneViewId
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7860773199566643614, guid: fbb4b4e669624b64db1bbefd10bdb09e, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 98c2f07db41cf944c9feab784bb6653f, type: 3}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: fbb4b4e669624b64db1bbefd10bdb09e, type: 3}
 --- !u!1 &1485223405
 GameObject:
   m_ObjectHideFlags: 0
@@ -426,10 +345,75 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!1001 &8306557508571866011
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2061012018103702560, guid: 3e189548eedf9dc4fb0e0e550af34bba, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.5915499
+      objectReference: {fileID: 0}
+    - target: {fileID: 2061012018103702560, guid: 3e189548eedf9dc4fb0e0e550af34bba, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.0379369
+      objectReference: {fileID: 0}
+    - target: {fileID: 2061012018103702560, guid: 3e189548eedf9dc4fb0e0e550af34bba, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2061012018103702560, guid: 3e189548eedf9dc4fb0e0e550af34bba, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2061012018103702560, guid: 3e189548eedf9dc4fb0e0e550af34bba, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2061012018103702560, guid: 3e189548eedf9dc4fb0e0e550af34bba, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2061012018103702560, guid: 3e189548eedf9dc4fb0e0e550af34bba, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2061012018103702560, guid: 3e189548eedf9dc4fb0e0e550af34bba, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2061012018103702560, guid: 3e189548eedf9dc4fb0e0e550af34bba, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2061012018103702560, guid: 3e189548eedf9dc4fb0e0e550af34bba, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4925599806203277258, guid: 3e189548eedf9dc4fb0e0e550af34bba, type: 3}
+      propertyPath: sceneViewId
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5813811792025571679, guid: 3e189548eedf9dc4fb0e0e550af34bba, type: 3}
+      propertyPath: m_Name
+      value: TormentPlayer
+      objectReference: {fileID: 0}
+    - target: {fileID: 6437191692170454787, guid: 3e189548eedf9dc4fb0e0e550af34bba, type: 3}
+      propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3e189548eedf9dc4fb0e0e550af34bba, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 456555444}
   - {fileID: 1485223407}
-  - {fileID: 671306047}
+  - {fileID: 8306557508571866011}

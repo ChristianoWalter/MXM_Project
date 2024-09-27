@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class TrainingPuppet : CharacterSet
 {
@@ -12,6 +13,8 @@ public class TrainingPuppet : CharacterSet
         base.Awake();
     }
 
+    
+    [PunRPC]
     public override void DamageEffect(float _knockback, float _knockup, bool _isDefended)
     {
         base.DamageEffect(_knockback, _knockup, _isDefended);
